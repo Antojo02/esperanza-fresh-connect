@@ -1,4 +1,4 @@
-import { Apple, Beef, Milk, Package, Wheat, Fish } from "lucide-react";
+import { Apple, Beef, Milk, Package, Wheat } from "lucide-react";
 
 const Products = () => {
   const categories = [
@@ -13,12 +13,6 @@ const Products = () => {
       title: "Carnicería",
       description: "Carnes de calidad superior",
       image: "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=400&h=300&fit=crop",
-    },
-    {
-      icon: Fish,
-      title: "Pescadería",
-      description: "Pescado fresco del día",
-      image: "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=400&h=300&fit=crop",
     },
     {
       icon: Milk,
