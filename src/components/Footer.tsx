@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { ShoppingCart, Phone, MapPin, Clock } from "lucide-react";
 
 const Footer = () => {
@@ -9,7 +10,7 @@ const Footer = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <a href="#" className="flex items-center gap-3 mb-6">
+            <Link to="/" className="flex items-center gap-3 mb-6">
               <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center">
                 <ShoppingCart className="w-6 h-6 text-primary-foreground" />
               </div>
@@ -17,7 +18,7 @@ const Footer = () => {
                 <span className="text-xs text-muted-foreground uppercase tracking-wider">Supermercado</span>
                 <span className="font-heading font-bold text-primary text-xl -mt-1">ESPERANZA</span>
               </div>
-            </a>
+            </Link>
             <p className="text-background/70 max-w-md mb-6">
               Más de 40 años siendo el supermercado de confianza de Molina de Segura. 
               Calidad, precios competitivos y atención cercana.
@@ -28,21 +29,21 @@ const Footer = () => {
           <div>
             <h3 className="font-heading font-semibold text-lg mb-4">Enlaces Rápidos</h3>
             <nav className="flex flex-col gap-3">
-              <a href="#sobre-nosotros" className="text-background/70 hover:text-primary transition-colors">
+              <Link to="/sobre-nosotros" className="text-background/70 hover:text-primary transition-colors">
                 Sobre Nosotros
-              </a>
-              <a href="#productos" className="text-background/70 hover:text-primary transition-colors">
+              </Link>
+              <Link to="/productos" className="text-background/70 hover:text-primary transition-colors">
                 Productos
-              </a>
-              <a href="#resenas" className="text-background/70 hover:text-primary transition-colors">
+              </Link>
+              <Link to="/resenas" className="text-background/70 hover:text-primary transition-colors">
                 Reseñas
-              </a>
-              <a href="#como-llegar" className="text-background/70 hover:text-primary transition-colors">
+              </Link>
+              <Link to="/como-llegar" className="text-background/70 hover:text-primary transition-colors">
                 Cómo Llegar
-              </a>
-              <a href="#contacto" className="text-background/70 hover:text-primary transition-colors">
+              </Link>
+              <Link to="/contacto" className="text-background/70 hover:text-primary transition-colors">
                 Contacto
-              </a>
+              </Link>
             </nav>
           </div>
 
