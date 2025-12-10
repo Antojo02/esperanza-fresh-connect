@@ -114,33 +114,6 @@ const SobreNosotros = () => {
         </div>
       </section>
 
-      {/* Team Section */}
-      <section className="py-20 bg-card">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-6">
-              Un Equipo <span className="text-primary">Comprometido</span>
-            </h2>
-            <p className="text-lg text-muted-foreground mb-8">
-              Detrás de cada producto que compras hay un equipo de personas dedicadas a hacer tu experiencia de compra lo más agradable posible. Nuestro personal, algunos con más de 20 años en la empresa, conoce a cada cliente y está siempre dispuesto a ayudar.
-            </p>
-            <div className="grid grid-cols-3 gap-6 max-w-md mx-auto">
-              <div className="text-center">
-                <p className="font-heading text-3xl font-bold text-primary">12+</p>
-                <p className="text-sm text-muted-foreground">Empleados</p>
-              </div>
-              <div className="text-center">
-                <p className="font-heading text-3xl font-bold text-primary">40+</p>
-                <p className="text-sm text-muted-foreground">Años</p>
-              </div>
-              <div className="text-center">
-                <p className="font-heading text-3xl font-bold text-primary">1000+</p>
-                <p className="text-sm text-muted-foreground">Clientes/semana</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
     </Layout>
   );
 };
