@@ -1,4 +1,4 @@
-import { Apple, Beef, Milk, Package, Wheat } from "lucide-react";
+import { Apple, Beef, Milk, Package, Wheat, Sandwich } from "lucide-react";
 
 const Products = () => {
   const categories = [
@@ -31,6 +31,12 @@ const Products = () => {
       title: "Productos Básicos",
       description: "Todo para tu despensa",
       image: "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=400&h=300&fit=crop",
+    },
+    {
+      icon: Sandwich,
+      title: "Embutidos y Quesos",
+      description: "Ibéricos, quesos y fiambres de calidad",
+      image: "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=400&h=300&fit=crop",
     },
   ];
 

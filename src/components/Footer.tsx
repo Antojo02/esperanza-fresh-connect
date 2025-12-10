@@ -1,8 +1,12 @@
 import { Link } from "react-router-dom";
-import { ShoppingCart, Phone, MapPin, Clock } from "lucide-react";
+import { Phone, MapPin, Clock, Star } from "lucide-react";
+import logo from "@/assets/logo.avif";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+
+  const googleMapsUrl = "https://www.google.com/maps?gs_lcrp=EgZjaHJvbWUqDggAEEUYJxg7GIAEGIoFMg4IABBFGCcYOxiABBiKBTIOCAEQRRgnGDsYgAQYigUyBggCEEUYQDIGCAMQRRg5MgoIBBAAGLEDGIAEMg0IBRAAGJIDGIAEGIoFMg0IBhAAGJIdGIAEGIoFMgYIBxBFGD3SAQg1NjQ2ajBqN6gCALACAA&um=1&ie=UTF-8&fb=1&gl=es&sa=X&geocode=KQsTQVKtgGMNMeUKc17ADUsq&daddr=30500+Molina+de+Segura,+Murcia";
+  const googleReviewUrl = "https://www.google.com/search?q=supermercado+esperanza&oq=superme&gs_lcrp=EgZjaHJvbWUqDggAEEUYJxg7GIAEGIoFMg4IABBFGCcYOxiABBiKBTIOCAEQRRgnGDsYgAQYigUyBggCEEUYQDIGCAMQRRg5MgoIBBAAGLEDGIAEMg0IBRAAGJIdGIAEGIoFMg0IBhAAGJIdGIAEGIoFMgYIBxBFGD3SAQg1NjQ2ajBqN6gCALACAA&sourceid=chrome&ie=UTF-8";
 
   return (
     <footer className="bg-foreground text-background py-16">
@@ -11,13 +15,11 @@ const Footer = () => {
           {/* Brand */}
           <div className="lg:col-span-2">
             <Link to="/" className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center">
-                <ShoppingCart className="w-6 h-6 text-primary-foreground" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xs text-muted-foreground uppercase tracking-wider">Supermercado</span>
-                <span className="font-heading font-bold text-primary text-xl -mt-1">ESPERANZA</span>
-              </div>
+              <img 
+                src={logo} 
+                alt="Supermercado Esperanza" 
+                className="h-14 w-auto object-contain"
+              />
             </Link>
             <p className="text-background/70 max-w-md mb-6">
               Más de 40 años siendo el supermercado de confianza de Molina de Segura. 
@@ -38,12 +40,23 @@ const Footer = () => {
               <Link to="/resenas" className="text-background/70 hover:text-primary transition-colors">
                 Reseñas
               </Link>
-              <Link to="/como-llegar" className="text-background/70 hover:text-primary transition-colors">
+              <a 
+                href={googleMapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-background/70 hover:text-primary transition-colors"
+              >
                 Cómo Llegar
-              </Link>
-              <Link to="/contacto" className="text-background/70 hover:text-primary transition-colors">
-                Contacto
-              </Link>
+              </a>
+              <a 
+                href={googleReviewUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-background/70 hover:text-primary transition-colors flex items-center gap-1"
+              >
+                <Star className="w-4 h-4" />
+                Dejar Reseña
+              </a>
             </nav>
           </div>
 
