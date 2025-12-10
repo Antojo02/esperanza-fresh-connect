@@ -1,4 +1,4 @@
-import { Apple, Beef, Milk, Package, Wheat, Fish, Wine, Coffee, Salad, IceCream } from "lucide-react";
+import { Apple, Beef, Milk, Package, Wheat, Wine, IceCream, Sandwich } from "lucide-react";
 import Layout from "@/components/Layout";
 
 const Productos = () => {
@@ -18,11 +18,11 @@ const Productos = () => {
       highlights: ["Calidad premium", "Cortes a medida", "Frescura diaria"],
     },
     {
-      icon: Fish,
-      title: "Pescadería",
-      description: "Pescado y marisco fresco del día para los platos más exquisitos",
-      image: "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=500&h=350&fit=crop",
-      highlights: ["Del día", "Variedad", "Preparación"],
+      icon: Sandwich,
+      title: "Embutidos y Quesos",
+      description: "Selección de embutidos ibéricos, quesos curados y fiambres de calidad",
+      image: "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=500&h=350&fit=crop",
+      highlights: ["Ibéricos", "Quesos curados", "Fiambres"],
     },
     {
       icon: Milk,
