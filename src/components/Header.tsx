@@ -1,24 +1,28 @@
 import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Menu, X, ShoppingCart, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
 
   const navLinks = [
-    { href: "#sobre-nosotros", label: "Sobre Nosotros" },
-    { href: "#productos", label: "Productos" },
-    { href: "#resenas", label: "Reseñas" },
-    { href: "#como-llegar", label: "Cómo Llegar" },
-    { href: "#contacto", label: "Contacto" },
+    { href: "/sobre-nosotros", label: "Sobre Nosotros" },
+    { href: "/productos", label: "Productos" },
+    { href: "/resenas", label: "Reseñas" },
+    { href: "/como-llegar", label: "Cómo Llegar" },
+    { href: "/contacto", label: "Contacto" },
   ];
+
+  const isActive = (path: string) => location.pathname === path;
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-sm border-b border-border">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-2 group">
+          <Link to="/" className="flex items-center gap-2 group">
             <div className="w-10 h-10 md:w-12 md:h-12 bg-primary rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
               <ShoppingCart className="w-5 h-5 md:w-6 md:h-6 text-primary-foreground" />
             </div>
@@ -26,18 +30,22 @@ const Header = () => {
               <span className="text-xs text-muted-foreground uppercase tracking-wider">Supermercado</span>
               <span className="font-heading font-bold text-primary text-lg md:text-xl -mt-1">ESPERANZA</span>
             </div>
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-8">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.href}
-                href={link.href}
-                className="text-foreground/80 hover:text-primary font-medium transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary after:transition-all hover:after:w-full"
+                to={link.href}
+                className={`font-medium transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-primary after:transition-all ${
+                  isActive(link.href)
+                    ? "text-primary after:w-full"
+                    : "text-foreground/80 hover:text-primary after:w-0 hover:after:w-full"
+                }`}
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </nav>
 
@@ -70,14 +78,18 @@ const Header = () => {
           <nav className="lg:hidden py-4 border-t border-border animate-fade-in">
             <div className="flex flex-col gap-2">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.href}
-                  href={link.href}
-                  className="px-4 py-3 text-foreground/80 hover:text-primary hover:bg-secondary rounded-lg font-medium transition-colors"
+                  to={link.href}
+                  className={`px-4 py-3 rounded-lg font-medium transition-colors ${
+                    isActive(link.href)
+                      ? "text-primary bg-esperanza-green-light"
+                      : "text-foreground/80 hover:text-primary hover:bg-secondary"
+                  }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
               <div className="pt-4 px-4">
                 <Button variant="hero" className="w-full" asChild>
