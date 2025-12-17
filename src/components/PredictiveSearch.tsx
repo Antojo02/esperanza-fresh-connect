@@ -96,7 +96,7 @@ export const PredictiveSearch = ({ className, onProductSelect }: PredictiveSearc
   return (
     <div ref={containerRef} className={`relative ${className}`}>
       <div className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+        <Search className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 text-muted-foreground" />
         <Input
           ref={inputRef}
           type="text"
@@ -104,7 +104,7 @@ export const PredictiveSearch = ({ className, onProductSelect }: PredictiveSearc
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => query.length >= 2 && setIsOpen(true)}
-          className="pl-12 pr-10 h-12 rounded-xl bg-card border-border focus:border-leaf-300 focus:ring-leaf-200"
+          className="pl-10 md:pl-12 pr-10 h-11 md:h-12 rounded-xl bg-card border-border focus:border-leaf-300 focus:ring-leaf-200 text-sm md:text-base"
         />
         {query && (
           <button
