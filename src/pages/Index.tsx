@@ -3,6 +3,8 @@ import { Star, Tag, Clock, Users, Phone, ArrowRight, ShoppingBag, Wallet, Leaf, 
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import { AnimatedSection } from "@/components/AnimatedSection";
+import { FeaturedProducts } from "@/components/FeaturedProducts";
+import { PostalCodeBanner } from "@/components/PostalCodeChecker";
 
 const Index = () => {
   const features = [
@@ -37,6 +39,9 @@ const Index = () => {
 
   return (
     <Layout>
+      {/* Postal Code Banner */}
+      <PostalCodeBanner />
+
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center bg-organic overflow-hidden">
         {/* Decorative elements */}
@@ -159,6 +164,9 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Featured Products Section */}
+      <FeaturedProducts />
 
       {/* Why Choose Us Section */}
       <section className="py-24 md:py-32 bg-card relative">

@@ -166,8 +166,16 @@ const Resenas = () => {
 
                 {/* Stars */}
                 <div className="flex gap-1 mb-4">
-                  {[...Array(review.rating)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 fill-esperanza-orange text-esperanza-orange" />
+                  {[...Array(5)].map((_, i) => (
+                    <Star 
+                      key={i} 
+                      className={`w-5 h-5 transition-all duration-300 ${
+                        i < review.rating 
+                          ? 'fill-harvest-400 text-harvest-400' 
+                          : 'fill-muted text-muted'
+                      }`}
+                      style={{ animationDelay: `${i * 100}ms` }}
+                    />
                   ))}
                 </div>
 
