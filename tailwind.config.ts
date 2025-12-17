@@ -7,15 +7,15 @@ export default {
   theme: {
     container: {
       center: true,
-      padding: "1.5rem",
+      padding: "2rem",
       screens: {
         "2xl": "1280px",
       },
     },
     extend: {
       fontFamily: {
-        sans: ['DM Sans', 'sans-serif'],
-        heading: ['Poppins', 'sans-serif'],
+        sans: ['Inter', 'sans-serif'],
+        serif: ['Playfair Display', 'serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -51,14 +51,29 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        esperanza: {
-          green: "hsl(var(--esperanza-green))",
-          "green-light": "hsl(var(--esperanza-green-light))",
-          "green-dark": "hsl(var(--esperanza-green-dark))",
-          orange: "hsl(var(--esperanza-orange))",
-          "orange-light": "hsl(var(--esperanza-orange-light))",
-          yellow: "hsl(var(--esperanza-yellow))",
-          cream: "hsl(var(--esperanza-cream))",
+        earth: {
+          50: "hsl(var(--earth-50))",
+          100: "hsl(var(--earth-100))",
+          200: "hsl(var(--earth-200))",
+          300: "hsl(var(--earth-300))",
+          400: "hsl(var(--earth-400))",
+          500: "hsl(var(--earth-500))",
+        },
+        leaf: {
+          50: "hsl(var(--leaf-50))",
+          100: "hsl(var(--leaf-100))",
+          200: "hsl(var(--leaf-200))",
+          300: "hsl(var(--leaf-300))",
+          400: "hsl(var(--leaf-400))",
+          500: "hsl(var(--leaf-500))",
+        },
+        harvest: {
+          50: "hsl(var(--harvest-50))",
+          100: "hsl(var(--harvest-100))",
+          200: "hsl(var(--harvest-200))",
+          300: "hsl(var(--harvest-300))",
+          400: "hsl(var(--harvest-400))",
+          500: "hsl(var(--harvest-500))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
@@ -77,11 +92,17 @@ export default {
         sm: "calc(var(--radius) - 4px)",
         xl: "calc(var(--radius) + 4px)",
         "2xl": "calc(var(--radius) + 8px)",
+        "3xl": "1.5rem",
       },
       boxShadow: {
-        'card': 'var(--shadow-md)',
-        'card-hover': 'var(--shadow-lg)',
+        'organic': 'var(--shadow-md)',
+        'organic-lg': 'var(--shadow-lg)',
+        'organic-xl': 'var(--shadow-xl)',
         'glow': 'var(--shadow-glow)',
+      },
+      spacing: {
+        '18': '4.5rem',
+        '22': '5.5rem',
       },
       keyframes: {
         "accordion-down": {

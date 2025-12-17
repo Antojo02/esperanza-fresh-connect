@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -6,7 +6,16 @@ import logo from "@/assets/logo.avif";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const navLinks = [
     { href: "/sobre-nosotros", label: "Sobre Nosotros" },
@@ -19,28 +28,34 @@ const Header = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-sm border-b border-border">
+    <header 
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled 
+          ? "bg-card/98 backdrop-blur-md shadow-organic border-b border-border" 
+          : "bg-transparent"
+      }`}
+    >
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16 md:h-20">
+        <div className="flex items-center justify-between h-18 md:h-22">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
             <img 
               src={logo} 
               alt="Supermercado Esperanza" 
-              className="h-12 md:h-14 w-auto object-contain"
+              className="h-12 md:h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
             />
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-8">
+          <nav className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 to={link.href}
-                className={`font-medium transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-primary after:transition-all ${
+                className={`px-4 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 ${
                   isActive(link.href)
-                    ? "text-primary after:w-full"
-                    : "text-foreground/80 hover:text-primary after:w-0 hover:after:w-full"
+                    ? "text-leaf-500 bg-leaf-50"
+                    : "text-foreground/80 hover:text-leaf-500 hover:bg-leaf-50"
                 }`}
               >
                 {link.label}
@@ -50,7 +65,7 @@ const Header = () => {
 
           {/* CTA Button */}
           <div className="hidden md:flex items-center gap-4">
-            <Button variant="hero" size="lg" asChild>
+            <Button variant="hero" size="default" asChild>
               <a href="tel:968641021" className="flex items-center gap-2">
                 <Phone className="w-4 h-4" />
                 968 64 10 21
@@ -60,7 +75,7 @@ const Header = () => {
 
           {/* Mobile Menu Button */}
           <button
-            className="lg:hidden p-2 hover:bg-secondary rounded-lg transition-colors"
+            className="lg:hidden p-3 hover:bg-leaf-50 rounded-xl transition-all duration-300 active:scale-95"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle menu"
           >
@@ -73,34 +88,38 @@ const Header = () => {
         </div>
 
         {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <nav className="lg:hidden py-4 border-t border-border animate-fade-in">
-            <div className="flex flex-col gap-2">
+        <div 
+          className={`lg:hidden overflow-hidden transition-all duration-300 ${
+            isMenuOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
+          <nav className="py-4 border-t border-border">
+            <div className="flex flex-col gap-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   to={link.href}
-                  className={`px-4 py-3 rounded-lg font-medium transition-colors ${
+                  className={`px-4 py-4 rounded-xl font-medium text-base transition-all duration-300 active:scale-98 ${
                     isActive(link.href)
-                      ? "text-primary bg-esperanza-green-light"
-                      : "text-foreground/80 hover:text-primary hover:bg-secondary"
+                      ? "text-leaf-500 bg-leaf-50"
+                      : "text-foreground/80 hover:text-leaf-500 hover:bg-leaf-50"
                   }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {link.label}
                 </Link>
               ))}
-              <div className="pt-4 px-4">
-                <Button variant="hero" className="w-full" asChild>
+              <div className="pt-4 px-2">
+                <Button variant="hero" size="lg" className="w-full" asChild>
                   <a href="tel:968641021" className="flex items-center justify-center gap-2">
-                    <Phone className="w-4 h-4" />
+                    <Phone className="w-5 h-5" />
                     968 64 10 21
                   </a>
                 </Button>
               </div>
             </div>
           </nav>
-        )}
+        </div>
       </div>
     </header>
   );
