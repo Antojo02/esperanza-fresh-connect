@@ -16,6 +16,7 @@ import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
+import { CouponInput } from '@/components/CouponInput';
 
 const timeSlots = [
   '09:00 - 11:00',
@@ -24,6 +25,14 @@ const timeSlots = [
   '17:00 - 19:00',
   '19:00 - 21:00',
 ];
+
+interface Coupon {
+  id: string;
+  code: string;
+  discount_type: string;
+  discount_value: number;
+  min_order_amount: number;
+}
 
 export const CartDrawer = () => {
   const { items, updateQuantity, removeItem, total, isOpen, setIsOpen, clearCart } = useCart();
@@ -37,6 +46,15 @@ export const CartDrawer = () => {
   const [phone, setPhone] = useState('');
   const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(false);
+  const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(null);
+  const [discount, setDiscount] = useState(0);
+
+  const finalTotal = Math.max(0, total - discount);
+
+  const handleCouponApplied = (coupon: Coupon | null, discountAmount: number) => {
+    setAppliedCoupon(coupon);
+    setDiscount(discountAmount);
+  };
 
   const handleCheckout = async () => {
     if (!user) {
@@ -66,7 +84,9 @@ export const CartDrawer = () => {
           delivery_address: address,
           phone,
           notes,
-          total,
+          total: finalTotal,
+          coupon_code: appliedCoupon?.code || null,
+          discount_amount: discount,
         },
       });
 
@@ -93,6 +113,8 @@ export const CartDrawer = () => {
     setAddress('');
     setPhone('');
     setNotes('');
+    setAppliedCoupon(null);
+    setDiscount(0);
   };
 
   return (
@@ -155,9 +177,28 @@ export const CartDrawer = () => {
               ))}
             </div>
             <div className="border-t pt-4 space-y-4">
-              <div className="flex justify-between text-lg font-semibold">
-                <span>Total</span>
-                <span className="text-primary">{total.toFixed(2)}€</span>
+              {/* Coupon Input */}
+              <CouponInput
+                orderTotal={total}
+                onCouponApplied={handleCouponApplied}
+                appliedCoupon={appliedCoupon}
+              />
+              
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Subtotal</span>
+                  <span>{total.toFixed(2)}€</span>
+                </div>
+                {discount > 0 && (
+                  <div className="flex justify-between text-sm text-leaf-600">
+                    <span>Descuento ({appliedCoupon?.code})</span>
+                    <span>-{discount.toFixed(2)}€</span>
+                  </div>
+                )}
+                <div className="flex justify-between text-lg font-semibold pt-2 border-t">
+                  <span>Total</span>
+                  <span className="text-primary">{finalTotal.toFixed(2)}€</span>
+                </div>
               </div>
               <Button className="w-full" size="lg" onClick={() => setStep('checkout')}>
                 Continuar con el pedido
@@ -261,13 +302,19 @@ export const CartDrawer = () => {
                     <span>{(item.price * item.quantity).toFixed(2)}€</span>
                   </div>
                 ))}
+                {discount > 0 && (
+                  <div className="flex justify-between text-sm text-leaf-600 pt-2 border-t">
+                    <span>Descuento ({appliedCoupon?.code})</span>
+                    <span>-{discount.toFixed(2)}€</span>
+                  </div>
+                )}
               </div>
             </div>
 
             <div className="border-t pt-4 space-y-4">
               <div className="flex justify-between text-lg font-semibold">
                 <span>Total a pagar</span>
-                <span className="text-primary">{total.toFixed(2)}€</span>
+                <span className="text-primary">{finalTotal.toFixed(2)}€</span>
               </div>
               <div className="flex gap-2">
                 <Button variant="outline" className="flex-1" onClick={() => setStep('cart')}>
