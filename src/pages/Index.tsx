@@ -43,59 +43,59 @@ const Index = () => {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center bg-organic overflow-hidden">
+      <section className="relative min-h-[85vh] md:min-h-[90vh] flex items-center bg-organic overflow-hidden pt-20 md:pt-0">
         {/* Decorative elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-32 -right-32 w-[500px] h-[500px] bg-leaf-100 rounded-full blur-3xl opacity-50" />
-          <div className="absolute top-1/2 -left-32 w-[400px] h-[400px] bg-harvest-100 rounded-full blur-3xl opacity-40" />
-          <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] bg-leaf-50 rounded-full blur-3xl opacity-60" />
+          <div className="absolute -top-32 -right-32 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-leaf-100 rounded-full blur-3xl opacity-50" />
+          <div className="absolute top-1/2 -left-32 w-[250px] md:w-[400px] h-[250px] md:h-[400px] bg-harvest-100 rounded-full blur-3xl opacity-40" />
+          <div className="absolute bottom-0 right-1/4 w-[200px] md:w-[300px] h-[200px] md:h-[300px] bg-leaf-50 rounded-full blur-3xl opacity-60" />
         </div>
 
-        <div className="container mx-auto px-4 py-20 relative z-10">
+        <div className="container mx-auto px-4 py-8 md:py-20 relative z-10">
           {/* Search Bar */}
-          <AnimatedSection animation="fade-up" className="max-w-2xl mx-auto mb-12">
+          <AnimatedSection animation="fade-up" className="max-w-xl md:max-w-2xl mx-auto mb-8 md:mb-12">
             <PredictiveSearch className="w-full" />
           </AnimatedSection>
 
-          <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
-            <div className="space-y-8">
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-16 lg:gap-20 items-center">
+            <div className="space-y-5 md:space-y-8">
               <AnimatedSection animation="fade-up">
-                <div className="inline-flex items-center gap-2 bg-card px-4 py-2.5 rounded-full shadow-organic border border-border">
+                <div className="inline-flex items-center gap-2 bg-card px-3 md:px-4 py-2 md:py-2.5 rounded-full shadow-organic border border-border">
                   <div className="flex">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-harvest-300 text-harvest-300" />
+                      <Star key={i} className="w-3 h-3 md:w-4 md:h-4 fill-harvest-300 text-harvest-300" />
                     ))}
                   </div>
-                  <span className="text-sm font-medium text-foreground">Excelentes Reseñas</span>
+                  <span className="text-xs md:text-sm font-medium text-foreground">Excelentes Reseñas</span>
                 </div>
               </AnimatedSection>
 
               <AnimatedSection animation="fade-up" delay={100}>
-                <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground leading-[1.1] tracking-tight">
+                <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground leading-[1.1] tracking-tight">
                   Tu Supermercado de{" "}
                   <span className="text-gradient">Confianza</span>
                 </h1>
               </AnimatedSection>
 
               <AnimatedSection animation="fade-up" delay={200}>
-                <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed max-w-xl">
+                <p className="text-base md:text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-xl">
                   Calidad superior en productos frescos, precios competitivos y la atención cercana que mereces. <span className="text-foreground font-medium">40 años</span> sirviendo a Molina de Segura.
                 </p>
               </AnimatedSection>
 
               <AnimatedSection animation="fade-up" delay={300}>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-2 md:gap-4">
                   {features.map((feature, index) => (
                     <div 
                       key={index} 
-                      className="group flex items-start gap-3 p-4 rounded-2xl bg-card/50 border border-border/50 hover:bg-card hover:border-leaf-200 hover:shadow-organic transition-all duration-300"
+                      className="group flex items-start gap-2 md:gap-3 p-2.5 md:p-4 rounded-xl md:rounded-2xl bg-card/50 border border-border/50 hover:bg-card hover:border-leaf-200 hover:shadow-organic transition-all duration-300"
                     >
-                      <div className="w-10 h-10 bg-leaf-100 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-leaf-200 transition-colors">
-                        <feature.icon className="w-5 h-5 text-leaf-500" />
+                      <div className="w-8 h-8 md:w-10 md:h-10 bg-leaf-100 rounded-lg md:rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-leaf-200 transition-colors">
+                        <feature.icon className="w-4 h-4 md:w-5 md:h-5 text-leaf-500" />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-foreground text-sm">{feature.title}</h3>
-                        <p className="text-xs text-muted-foreground mt-0.5">{feature.description}</p>
+                        <h3 className="font-semibold text-foreground text-xs md:text-sm">{feature.title}</h3>
+                        <p className="text-[10px] md:text-xs text-muted-foreground mt-0.5 hidden sm:block">{feature.description}</p>
                       </div>
                     </div>
                   ))}
@@ -103,16 +103,16 @@ const Index = () => {
               </AnimatedSection>
 
               <AnimatedSection animation="fade-up" delay={400}>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Button variant="hero" size="xl" asChild className="group">
-                    <Link to="/productos" className="flex items-center gap-2">
-                      Ver Nuestros Productos
-                      <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
+                  <Button variant="hero" size="lg" asChild className="group">
+                    <Link to="/productos" className="flex items-center justify-center gap-2 text-sm md:text-base">
+                      Ver Productos
+                      <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
                     </Link>
                   </Button>
-                  <Button variant="hero-outline" size="xl" asChild>
-                    <a href="tel:968641021" className="flex items-center gap-2">
-                      <Phone className="w-5 h-5" />
+                  <Button variant="hero-outline" size="lg" asChild>
+                    <a href="tel:968641021" className="flex items-center justify-center gap-2 text-sm md:text-base">
+                      <Phone className="w-4 h-4 md:w-5 md:h-5" />
                       968 64 10 21
                     </a>
                   </Button>
@@ -120,20 +120,20 @@ const Index = () => {
               </AnimatedSection>
 
               <AnimatedSection animation="fade-up" delay={500}>
-                <div className="inline-flex items-center gap-4 bg-card px-6 py-4 rounded-2xl shadow-organic border border-border">
+                <div className="inline-flex items-center gap-3 md:gap-4 bg-card px-4 md:px-6 py-3 md:py-4 rounded-xl md:rounded-2xl shadow-organic border border-border">
                   <div className="relative">
-                    <div className="w-3 h-3 bg-leaf-400 rounded-full" />
-                    <div className="absolute inset-0 w-3 h-3 bg-leaf-400 rounded-full animate-ping opacity-75" />
+                    <div className="w-2.5 h-2.5 md:w-3 md:h-3 bg-leaf-400 rounded-full" />
+                    <div className="absolute inset-0 w-2.5 h-2.5 md:w-3 md:h-3 bg-leaf-400 rounded-full animate-ping opacity-75" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-foreground">Abierto hoy hasta las 14:00</p>
-                    <p className="text-xs text-muted-foreground">Próxima apertura: 17:30</p>
+                    <p className="text-xs md:text-sm font-semibold text-foreground">Abierto hoy hasta las 14:00</p>
+                    <p className="text-[10px] md:text-xs text-muted-foreground">Próxima apertura: 17:30</p>
                   </div>
                 </div>
               </AnimatedSection>
             </div>
 
-            <AnimatedSection animation="scale-in" delay={200} className="relative">
+            <AnimatedSection animation="scale-in" delay={200} className="relative hidden lg:block">
               <div className="relative">
                 {/* Decorative badge */}
                 <div className="absolute -top-4 -left-4 z-10">
@@ -174,33 +174,33 @@ const Index = () => {
       <FeaturedProducts />
 
       {/* Why Choose Us Section */}
-      <section className="py-24 md:py-32 bg-card relative">
+      <section className="py-16 md:py-24 lg:py-32 bg-card relative">
         <div className="absolute inset-0 bg-leaf-gradient opacity-30" />
         <div className="container mx-auto px-4 relative">
-          <AnimatedSection className="text-center max-w-2xl mx-auto mb-16">
-            <span className="inline-block text-leaf-500 font-medium text-sm uppercase tracking-wider mb-4">
+          <AnimatedSection className="text-center max-w-2xl mx-auto mb-10 md:mb-16">
+            <span className="inline-block text-leaf-500 font-medium text-xs md:text-sm uppercase tracking-wider mb-3 md:mb-4">
               Por qué elegirnos
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-6">
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4 md:mb-6">
               Más que un supermercado, somos{" "}
               <span className="text-gradient">parte de tu comunidad</span>
             </h2>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-base md:text-lg text-muted-foreground">
               Descubre por qué miles de familias confían en nosotros cada día
             </p>
           </AnimatedSection>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
             {reasons.map((reason, index) => (
               <AnimatedSection key={index} animation="fade-up" delay={index * 100}>
-                <div className="group bg-background p-8 rounded-3xl shadow-organic hover:shadow-organic-lg transition-all duration-500 hover:-translate-y-2 border border-border hover:border-leaf-200 h-full">
-                  <div className="w-16 h-16 bg-leaf-100 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-leaf-200 group-hover:scale-110 transition-all duration-300">
-                    <reason.icon className="w-8 h-8 text-leaf-500" />
+                <div className="group bg-background p-4 md:p-8 rounded-2xl md:rounded-3xl shadow-organic hover:shadow-organic-lg transition-all duration-500 hover:-translate-y-2 border border-border hover:border-leaf-200 h-full">
+                  <div className="w-10 h-10 md:w-16 md:h-16 bg-leaf-100 rounded-xl md:rounded-2xl flex items-center justify-center mb-3 md:mb-6 group-hover:bg-leaf-200 group-hover:scale-110 transition-all duration-300">
+                    <reason.icon className="w-5 h-5 md:w-8 md:h-8 text-leaf-500" />
                   </div>
-                  <h3 className="font-serif font-semibold text-xl text-foreground mb-3">
+                  <h3 className="font-serif font-semibold text-sm md:text-xl text-foreground mb-1 md:mb-3">
                     {reason.title}
                   </h3>
-                  <p className="text-muted-foreground leading-relaxed">
+                  <p className="text-muted-foreground text-xs md:text-base leading-relaxed hidden sm:block">
                     {reason.description}
                   </p>
                 </div>
@@ -208,7 +208,7 @@ const Index = () => {
             ))}
           </div>
 
-          <AnimatedSection className="text-center mt-16">
+          <AnimatedSection className="text-center mt-10 md:mt-16">
             <Button variant="hero" size="lg" asChild>
               <Link to="/sobre-nosotros">Conoce Más Sobre Nosotros</Link>
             </Button>
@@ -217,26 +217,26 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-primary relative overflow-hidden">
+      <section className="py-12 md:py-20 bg-primary relative overflow-hidden">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-20 -right-20 w-80 h-80 bg-leaf-500 rounded-full opacity-30" />
-          <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-leaf-500 rounded-full opacity-30" />
+          <div className="absolute -top-20 -right-20 w-40 md:w-80 h-40 md:h-80 bg-leaf-500 rounded-full opacity-30" />
+          <div className="absolute -bottom-20 -left-20 w-40 md:w-80 h-40 md:h-80 bg-leaf-500 rounded-full opacity-30" />
         </div>
         <div className="container mx-auto px-4 relative">
           <AnimatedSection className="text-center">
-            <h2 className="font-serif text-3xl md:text-4xl font-bold text-primary-foreground mb-4">
+            <h2 className="font-serif text-2xl md:text-3xl lg:text-4xl font-bold text-primary-foreground mb-3 md:mb-4">
               ¿Listo para hacer tu compra?
             </h2>
-            <p className="text-primary-foreground/80 mb-10 max-w-xl mx-auto text-lg">
+            <p className="text-primary-foreground/80 mb-6 md:mb-10 max-w-xl mx-auto text-sm md:text-lg">
               Visítanos y descubre por qué somos el supermercado favorito de Molina de Segura
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button variant="accent" size="xl" asChild>
+            <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center">
+              <Button variant="accent" size="lg" asChild>
                 <Link to="/como-llegar">Cómo Llegar</Link>
               </Button>
               <Button 
                 variant="hero-outline" 
-                size="xl" 
+                size="lg" 
                 className="border-primary-foreground/30 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground hover:text-primary" 
                 asChild
               >

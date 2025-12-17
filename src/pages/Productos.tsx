@@ -38,7 +38,7 @@ const categories = [
   "Embutidos y Quesos",
   "Lácteos",
   "Panadería",
-  "Despensa",
+  "Productos Básicos",
   "Bebidas",
 ];
 
@@ -129,22 +129,22 @@ const Productos = () => {
       </section>
 
       {/* Search and Filters */}
-      <section className="py-6 bg-card border-b border-border sticky top-[72px] z-40">
+      <section className="py-4 md:py-6 bg-card border-b border-border sticky top-[72px] z-40">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row gap-4 items-center">
+          <div className="flex flex-col gap-4">
             {/* Search */}
-            <div className="relative w-full md:w-80">
+            <div className="relative w-full">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
                 placeholder="Buscar productos..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
+                className="pl-10 h-11"
               />
             </div>
 
             {/* Category Filters */}
-            <div className="flex-1 overflow-x-auto pb-2 md:pb-0">
+            <div className="overflow-x-auto -mx-4 px-4 pb-1 scrollbar-hide">
               <div className="flex gap-2 min-w-max">
                 {categories.map((category) => (
                   <Button
@@ -152,7 +152,7 @@ const Productos = () => {
                     variant={selectedCategory === category ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSelectedCategory(category)}
-                    className="whitespace-nowrap"
+                    className="whitespace-nowrap text-xs sm:text-sm"
                   >
                     {category}
                   </Button>
@@ -164,80 +164,73 @@ const Productos = () => {
       </section>
 
       {/* Products Grid */}
-      <section className="py-12 bg-background">
+      <section className="py-8 md:py-12 bg-background">
         <div className="container mx-auto px-4">
           {loading ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
               {[...Array(8)].map((_, i) => (
-                <div key={i} className="bg-card rounded-2xl p-4 animate-pulse">
-                  <div className="w-full aspect-square bg-muted rounded-xl mb-4" />
-                  <div className="h-4 bg-muted rounded w-3/4 mb-2" />
-                  <div className="h-3 bg-muted rounded w-1/2" />
+                <div key={i} className="bg-card rounded-xl md:rounded-2xl p-3 md:p-4 animate-pulse">
+                  <div className="w-full aspect-square bg-muted rounded-lg md:rounded-xl mb-3 md:mb-4" />
+                  <div className="h-3 md:h-4 bg-muted rounded w-3/4 mb-2" />
+                  <div className="h-2 md:h-3 bg-muted rounded w-1/2" />
                 </div>
               ))}
             </div>
           ) : filteredProducts.length === 0 ? (
-            <div className="text-center py-16">
-              <Filter className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="font-serif text-xl font-semibold text-foreground mb-2">
+            <div className="text-center py-12 md:py-16">
+              <Filter className="w-10 h-10 md:w-12 md:h-12 text-muted-foreground mx-auto mb-4" />
+              <h3 className="font-serif text-lg md:text-xl font-semibold text-foreground mb-2">
                 No se encontraron productos
               </h3>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground text-sm md:text-base">
                 Prueba con otra categoría o término de búsqueda
               </p>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
               {filteredProducts.map((product, index) => (
-                <AnimatedSection key={product.id} animation="fade-up" delay={index * 50}>
-                  <div className="group bg-card rounded-2xl shadow-organic hover:shadow-organic-lg transition-all duration-300 overflow-hidden border border-border hover:border-leaf-200">
+                <AnimatedSection key={product.id} animation="fade-up" delay={index * 30}>
+                  <div className="group bg-card rounded-xl md:rounded-2xl shadow-organic hover:shadow-organic-lg transition-all duration-300 overflow-hidden border border-border hover:border-leaf-200">
                     {/* Image */}
                     <div className="relative aspect-square overflow-hidden">
                       <img
                         src={product.image_url || '/placeholder.svg'}
                         alt={product.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
                       />
                       {product.is_fresh && (
-                        <div className="absolute top-3 left-3 bg-leaf-500 text-primary-foreground px-2.5 py-1 rounded-full text-xs font-medium flex items-center gap-1">
-                          <Leaf className="w-3 h-3" />
+                        <div className="absolute top-2 left-2 md:top-3 md:left-3 bg-leaf-500 text-primary-foreground px-2 py-0.5 md:px-2.5 md:py-1 rounded-full text-[10px] md:text-xs font-medium flex items-center gap-1">
+                          <Leaf className="w-2.5 h-2.5 md:w-3 md:h-3" />
                           Fresco
                         </div>
                       )}
                       {product.is_featured && (
-                        <div className="absolute top-3 right-3 bg-harvest-400 text-primary-foreground px-2.5 py-1 rounded-full text-xs font-medium">
+                        <div className="absolute top-2 right-2 md:top-3 md:right-3 bg-harvest-400 text-primary-foreground px-2 py-0.5 md:px-2.5 md:py-1 rounded-full text-[10px] md:text-xs font-medium">
                           Destacado
                         </div>
                       )}
                     </div>
 
                     {/* Content */}
-                    <div className="p-4">
-                      <div className="flex items-start justify-between gap-2 mb-2">
-                        <div>
-                          <span className="text-xs text-muted-foreground">{product.category}</span>
-                          <h3 className="font-medium text-foreground line-clamp-1">{product.name}</h3>
-                        </div>
+                    <div className="p-3 md:p-4">
+                      <div className="mb-1 md:mb-2">
+                        <span className="text-[10px] md:text-xs text-muted-foreground">{product.category}</span>
+                        <h3 className="font-medium text-foreground text-sm md:text-base line-clamp-2 min-h-[2.5rem] md:min-h-[1.5rem]">{product.name}</h3>
                       </div>
-                      
-                      {product.description && (
-                        <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
-                          {product.description}
-                        </p>
-                      )}
 
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-between gap-2">
                         <div>
-                          <span className="text-xl font-bold text-primary">{product.price.toFixed(2)}€</span>
-                          <span className="text-sm text-muted-foreground">/{product.unit}</span>
+                          <span className="text-base md:text-xl font-bold text-primary">{product.price.toFixed(2)}€</span>
+                          <span className="text-[10px] md:text-sm text-muted-foreground">/{product.unit}</span>
                         </div>
                         <Button
                           size="sm"
                           onClick={() => handleAddToCart(product)}
-                          className="group/btn"
+                          className="group/btn h-8 md:h-9 px-2 md:px-3 text-xs md:text-sm"
                         >
-                          <Plus className="w-4 h-4 mr-1 group-hover/btn:rotate-90 transition-transform" />
-                          Añadir
+                          <Plus className="w-3 h-3 md:w-4 md:h-4 md:mr-1 group-hover/btn:rotate-90 transition-transform" />
+                          <span className="hidden md:inline">Añadir</span>
                         </Button>
                       </div>
                     </div>
