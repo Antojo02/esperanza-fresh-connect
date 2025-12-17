@@ -1,66 +1,90 @@
-import { Apple, Beef, Milk, Package, Wheat, Wine, IceCream, Sandwich, Sparkles, Check } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { Apple, Beef, Milk, Package, Wheat, Wine, IceCream, Sandwich, Sparkles, Check, Plus, Search, Filter, Leaf } from "lucide-react";
 import Layout from "@/components/Layout";
 import { AnimatedSection } from "@/components/AnimatedSection";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { supabase } from "@/integrations/supabase/client";
+import { useCart } from "@/contexts/CartContext";
+import { toast } from "sonner";
+
+interface Product {
+  id: string;
+  name: string;
+  description: string | null;
+  price: number;
+  category: string;
+  image_url: string | null;
+  unit: string;
+  is_featured: boolean;
+  is_fresh: boolean;
+}
+
+const categoryIcons: Record<string, any> = {
+  "Frutas y Verduras": Apple,
+  "Carnicería": Beef,
+  "Lácteos": Milk,
+  "Panadería": Wheat,
+  "Despensa": Package,
+  "Bebidas": Wine,
+  "Congelados": IceCream,
+  "Embutidos y Quesos": Sandwich,
+};
+
+const categories = [
+  "Todos",
+  "Frutas y Verduras",
+  "Carnicería",
+  "Embutidos y Quesos",
+  "Lácteos",
+  "Panadería",
+  "Despensa",
+  "Bebidas",
+];
 
 const Productos = () => {
-  const categories = [
-    {
-      icon: Apple,
-      title: "Frutas y Verduras",
-      description: "Productos frescos seleccionados diariamente de los mejores proveedores locales",
-      image: "https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=500&h=350&fit=crop",
-      highlights: ["Producto local", "Selección diaria", "Temporada"],
-    },
-    {
-      icon: Beef,
-      title: "Carnicería",
-      description: "Carnes de calidad superior con cortes personalizados según tus necesidades",
-      image: "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=500&h=350&fit=crop",
-      highlights: ["Calidad premium", "Cortes a medida", "Frescura diaria"],
-    },
-    {
-      icon: Sandwich,
-      title: "Embutidos y Quesos",
-      description: "Selección de embutidos ibéricos, quesos curados y fiambres de calidad",
-      image: "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=500&h=350&fit=crop",
-      highlights: ["Ibéricos", "Quesos curados", "Fiambres"],
-    },
-    {
-      icon: Milk,
-      title: "Lácteos y Huevos",
-      description: "Leche, quesos, yogures y huevos de la mejor procedencia",
-      image: "https://images.unsplash.com/photo-1628088062854-d1870b4553da?w=500&h=350&fit=crop",
-      highlights: ["Frescos", "Variedad", "Origen local"],
-    },
-    {
-      icon: Wheat,
-      title: "Panadería",
-      description: "Pan recién horneado cada día con recetas tradicionales",
-      image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=500&h=350&fit=crop",
-      highlights: ["Recién hecho", "Tradicional", "Variedad"],
-    },
-    {
-      icon: Package,
-      title: "Despensa",
-      description: "Productos básicos, conservas y todo lo esencial para tu hogar",
-      image: "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=500&h=350&fit=crop",
-      highlights: ["Esenciales", "Marcas", "Buenos precios"],
-    },
-    {
-      icon: Wine,
-      title: "Bebidas",
-      description: "Refrescos, zumos, vinos y bebidas para toda la familia",
-      image: "https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=500&h=350&fit=crop",
-      highlights: ["Gran variedad", "Vinos locales", "Refrescos"],
-    },
-    {
-      icon: IceCream,
-      title: "Congelados",
-      description: "Helados, verduras congeladas y productos preparados de calidad",
-      image: "https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=500&h=350&fit=crop",
-      highlights: ["Calidad", "Preparados", "Helados"],
-    },
-  ];
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState("Todos");
+  const [searchQuery, setSearchQuery] = useState("");
+  const { addItem } = useCart();
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .order('is_featured', { ascending: false })
+      .order('name');
+
+    if (error) {
+      console.error('Error fetching products:', error);
+      toast.error('Error al cargar los productos');
+    } else {
+      setProducts(data || []);
+    }
+    setLoading(false);
+  };
+
+  const filteredProducts = products.filter((product) => {
+    const matchesCategory = selectedCategory === "Todos" || product.category === selectedCategory;
+    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+  const handleAddToCart = (product: Product) => {
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image_url: product.image_url,
+      unit: product.unit,
+    });
+    toast.success(`${product.name} añadido al carrito`);
+  };
 
   const commitments = [
     {
@@ -83,7 +107,7 @@ const Productos = () => {
   return (
     <Layout>
       {/* Hero */}
-      <section className="pt-32 pb-20 bg-organic relative overflow-hidden">
+      <section className="pt-32 pb-12 bg-organic relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute -top-32 -right-32 w-[400px] h-[400px] bg-leaf-100 rounded-full blur-3xl opacity-50" />
           <div className="absolute bottom-0 -left-32 w-[300px] h-[300px] bg-harvest-100 rounded-full blur-3xl opacity-40" />
@@ -92,61 +116,136 @@ const Productos = () => {
           <AnimatedSection className="max-w-3xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 bg-leaf-100 text-leaf-500 px-4 py-2.5 rounded-full text-sm font-medium mb-6">
               <Sparkles className="w-4 h-4" />
-              Nuestros Productos
+              Tienda Online
             </div>
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6">
-              Variedad y <span className="text-gradient">Calidad</span>
+              Compra <span className="text-gradient">Fresco</span>
             </h1>
             <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-              Descubre todo lo que tenemos para ti y tu familia. Productos frescos cada día.
+              Haz tu pedido online y recíbelo en casa o recógelo en tienda.
             </p>
           </AnimatedSection>
         </div>
       </section>
 
+      {/* Search and Filters */}
+      <section className="py-6 bg-card border-b border-border sticky top-[72px] z-40">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row gap-4 items-center">
+            {/* Search */}
+            <div className="relative w-full md:w-80">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Buscar productos..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+
+            {/* Category Filters */}
+            <div className="flex-1 overflow-x-auto pb-2 md:pb-0">
+              <div className="flex gap-2 min-w-max">
+                {categories.map((category) => (
+                  <Button
+                    key={category}
+                    variant={selectedCategory === category ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSelectedCategory(category)}
+                    className="whitespace-nowrap"
+                  >
+                    {category}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Products Grid */}
-      <section className="py-24 bg-card relative">
-        <div className="absolute inset-0 bg-leaf-gradient opacity-20" />
-        <div className="container mx-auto px-4 relative">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {categories.map((category, index) => (
-              <AnimatedSection key={index} animation="fade-up" delay={index * 75}>
-                <div className="group bg-background rounded-3xl shadow-organic hover:shadow-organic-lg transition-all duration-500 overflow-hidden border border-border hover:border-leaf-200 hover:-translate-y-2 h-full">
-                  <div className="relative h-48 overflow-hidden">
-                    <img
-                      src={category.image}
-                      alt={category.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/20 to-transparent" />
-                    <div className="absolute bottom-4 left-4">
-                      <div className="w-12 h-12 bg-card rounded-xl flex items-center justify-center shadow-organic-lg border border-border">
-                        <category.icon className="w-6 h-6 text-leaf-500" />
+      <section className="py-12 bg-background">
+        <div className="container mx-auto px-4">
+          {loading ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {[...Array(8)].map((_, i) => (
+                <div key={i} className="bg-card rounded-2xl p-4 animate-pulse">
+                  <div className="w-full aspect-square bg-muted rounded-xl mb-4" />
+                  <div className="h-4 bg-muted rounded w-3/4 mb-2" />
+                  <div className="h-3 bg-muted rounded w-1/2" />
+                </div>
+              ))}
+            </div>
+          ) : filteredProducts.length === 0 ? (
+            <div className="text-center py-16">
+              <Filter className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+              <h3 className="font-serif text-xl font-semibold text-foreground mb-2">
+                No se encontraron productos
+              </h3>
+              <p className="text-muted-foreground">
+                Prueba con otra categoría o término de búsqueda
+              </p>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {filteredProducts.map((product, index) => (
+                <AnimatedSection key={product.id} animation="fade-up" delay={index * 50}>
+                  <div className="group bg-card rounded-2xl shadow-organic hover:shadow-organic-lg transition-all duration-300 overflow-hidden border border-border hover:border-leaf-200">
+                    {/* Image */}
+                    <div className="relative aspect-square overflow-hidden">
+                      <img
+                        src={product.image_url || '/placeholder.svg'}
+                        alt={product.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      {product.is_fresh && (
+                        <div className="absolute top-3 left-3 bg-leaf-500 text-primary-foreground px-2.5 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                          <Leaf className="w-3 h-3" />
+                          Fresco
+                        </div>
+                      )}
+                      {product.is_featured && (
+                        <div className="absolute top-3 right-3 bg-harvest-400 text-primary-foreground px-2.5 py-1 rounded-full text-xs font-medium">
+                          Destacado
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-4">
+                      <div className="flex items-start justify-between gap-2 mb-2">
+                        <div>
+                          <span className="text-xs text-muted-foreground">{product.category}</span>
+                          <h3 className="font-medium text-foreground line-clamp-1">{product.name}</h3>
+                        </div>
+                      </div>
+                      
+                      {product.description && (
+                        <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
+                          {product.description}
+                        </p>
+                      )}
+
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <span className="text-xl font-bold text-primary">{product.price.toFixed(2)}€</span>
+                          <span className="text-sm text-muted-foreground">/{product.unit}</span>
+                        </div>
+                        <Button
+                          size="sm"
+                          onClick={() => handleAddToCart(product)}
+                          className="group/btn"
+                        >
+                          <Plus className="w-4 h-4 mr-1 group-hover/btn:rotate-90 transition-transform" />
+                          Añadir
+                        </Button>
                       </div>
                     </div>
                   </div>
-                  <div className="p-6">
-                    <h3 className="font-serif font-semibold text-xl text-foreground mb-2">
-                      {category.title}
-                    </h3>
-                    <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
-                      {category.description}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {category.highlights.map((highlight, i) => (
-                        <span
-                          key={i}
-                          className="bg-leaf-50 text-leaf-500 text-xs px-3 py-1.5 rounded-full font-medium border border-leaf-100"
-                        >
-                          {highlight}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </AnimatedSection>
-            ))}
-          </div>
+                </AnimatedSection>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
