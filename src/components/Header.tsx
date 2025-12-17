@@ -1,13 +1,22 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Phone } from "lucide-react";
+import { Menu, X, Phone, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { CartButton } from "@/components/CartButton";
+import { useAuth } from "@/contexts/AuthContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import logo from "@/assets/logo.avif";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const { user, signOut } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -63,8 +72,33 @@ const Header = () => {
             ))}
           </nav>
 
-          {/* CTA Button */}
-          <div className="hidden md:flex items-center gap-4">
+          {/* Right Actions */}
+          <div className="hidden md:flex items-center gap-2">
+            <CartButton />
+            
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="relative">
+                    <User className="w-5 h-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem className="text-muted-foreground text-sm">
+                    {user.email}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={signOut} className="text-destructive">
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Cerrar sesión
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/auth">Iniciar sesión</Link>
+              </Button>
+            )}
+
             <Button variant="hero" size="default" asChild>
               <a href="tel:968641021" className="flex items-center gap-2">
                 <Phone className="w-4 h-4" />
@@ -73,24 +107,27 @@ const Header = () => {
             </Button>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="lg:hidden p-3 hover:bg-leaf-50 rounded-xl transition-all duration-300 active:scale-95"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            {isMenuOpen ? (
-              <X className="w-6 h-6 text-foreground" />
-            ) : (
-              <Menu className="w-6 h-6 text-foreground" />
-            )}
-          </button>
+          {/* Mobile Actions */}
+          <div className="flex lg:hidden items-center gap-2">
+            <CartButton />
+            <button
+              className="p-3 hover:bg-leaf-50 rounded-xl transition-all duration-300 active:scale-95"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {isMenuOpen ? (
+                <X className="w-6 h-6 text-foreground" />
+              ) : (
+                <Menu className="w-6 h-6 text-foreground" />
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}
         <div 
           className={`lg:hidden overflow-hidden transition-all duration-300 ${
-            isMenuOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+            isMenuOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
           }`}
         >
           <nav className="py-4 border-t border-border">
@@ -109,7 +146,24 @@ const Header = () => {
                   {link.label}
                 </Link>
               ))}
-              <div className="pt-4 px-2">
+              
+              <div className="pt-4 px-2 space-y-2">
+                {user ? (
+                  <div className="flex items-center justify-between bg-muted/50 rounded-xl px-4 py-3">
+                    <span className="text-sm text-muted-foreground truncate">{user.email}</span>
+                    <Button variant="ghost" size="sm" onClick={signOut}>
+                      <LogOut className="w-4 h-4" />
+                    </Button>
+                  </div>
+                ) : (
+                  <Button variant="outline" className="w-full" asChild>
+                    <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
+                      <User className="w-4 h-4 mr-2" />
+                      Iniciar sesión
+                    </Link>
+                  </Button>
+                )}
+                
                 <Button variant="hero" size="lg" className="w-full" asChild>
                   <a href="tel:968641021" className="flex items-center justify-center gap-2">
                     <Phone className="w-5 h-5" />
