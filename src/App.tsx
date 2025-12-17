@@ -14,6 +14,7 @@ import ComoLlegar from "./pages/ComoLlegar";
 import Contacto from "./pages/Contacto";
 import Auth from "./pages/Auth";
 import PagoExitoso from "./pages/PagoExitoso";
+import MisPedidos from "./pages/MisPedidos";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ const App = () => (
               <Route path="/contacto" element={<Contacto />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/pago-exitoso" element={<PagoExitoso />} />
+              <Route path="/mis-pedidos" element={<MisPedidos />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <CartDrawer />

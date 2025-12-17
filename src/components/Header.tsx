@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Phone, User, LogOut } from "lucide-react";
+import { Menu, X, Phone, User, LogOut, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CartButton } from "@/components/CartButton";
 import { useAuth } from "@/contexts/AuthContext";
@@ -8,6 +8,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import logo from "@/assets/logo.avif";
@@ -87,6 +88,14 @@ const Header = () => {
                   <DropdownMenuItem className="text-muted-foreground text-sm">
                     {user.email}
                   </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/mis-pedidos" className="flex items-center">
+                      <Package className="w-4 h-4 mr-2" />
+                      Mis Pedidos
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={signOut} className="text-destructive">
                     <LogOut className="w-4 h-4 mr-2" />
                     Cerrar sesión
@@ -149,12 +158,20 @@ const Header = () => {
               
               <div className="pt-4 px-2 space-y-2">
                 {user ? (
-                  <div className="flex items-center justify-between bg-muted/50 rounded-xl px-4 py-3">
-                    <span className="text-sm text-muted-foreground truncate">{user.email}</span>
-                    <Button variant="ghost" size="sm" onClick={signOut}>
-                      <LogOut className="w-4 h-4" />
+                  <>
+                    <Button variant="outline" className="w-full mb-2" asChild>
+                      <Link to="/mis-pedidos" onClick={() => setIsMenuOpen(false)}>
+                        <Package className="w-4 h-4 mr-2" />
+                        Mis Pedidos
+                      </Link>
                     </Button>
-                  </div>
+                    <div className="flex items-center justify-between bg-muted/50 rounded-xl px-4 py-3">
+                      <span className="text-sm text-muted-foreground truncate">{user.email}</span>
+                      <Button variant="ghost" size="sm" onClick={signOut}>
+                        <LogOut className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </>
                 ) : (
                   <Button variant="outline" className="w-full" asChild>
                     <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
