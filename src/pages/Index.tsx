@@ -4,9 +4,12 @@ import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { FeaturedProducts } from "@/components/FeaturedProducts";
-import { PostalCodeBanner } from "@/components/PostalCodeChecker";
+import { PredictiveSearch } from "@/components/PredictiveSearch";
+import { useOrderNotifications } from "@/hooks/useOrderNotifications";
 
 const Index = () => {
+  useOrderNotifications();
+
   const features = [
     { icon: Tag, title: "Mejores Precios", description: "Más económico que grandes cadenas" },
     { icon: ShoppingBag, title: "Carnes de Calidad", description: "Frescura y sabor garantizado" },
@@ -39,9 +42,6 @@ const Index = () => {
 
   return (
     <Layout>
-      {/* Postal Code Banner */}
-      <PostalCodeBanner />
-
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center bg-organic overflow-hidden">
         {/* Decorative elements */}
@@ -52,6 +52,11 @@ const Index = () => {
         </div>
 
         <div className="container mx-auto px-4 py-20 relative z-10">
+          {/* Search Bar */}
+          <AnimatedSection animation="fade-up" className="max-w-2xl mx-auto mb-12">
+            <PredictiveSearch className="w-full" />
+          </AnimatedSection>
+
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
             <div className="space-y-8">
               <AnimatedSection animation="fade-up">
