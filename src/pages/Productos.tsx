@@ -20,6 +20,46 @@ interface Product {
   is_fresh: boolean;
 }
 
+const categoryFallbacks: Record<string, string> = {
+  "Frutas y Verduras": "https://images.unsplash.com/photo-1506806732259-39c2d0268443?w=800",
+  "Carnicería": "https://images.unsplash.com/photo-1604908177225-9f5af45f4f54?w=800",
+  "Lácteos": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800",
+  "Panadería": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=800",
+  "Despensa": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800",
+  "Productos Básicos": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800",
+  "Bebidas": "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=800",
+  "Embutidos y Quesos": "https://images.unsplash.com/photo-1502741338009-cac2772e18bc?w=800",
+  "Congelados": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=800",
+};
+
+const productFallbacks: { match: RegExp; url: string }[] = [
+  { match: /coca|cola/i, url: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=800" },
+  { match: /agua/i, url: "https://images.unsplash.com/photo-1526402462921-9e9dd1b4e47b?w=800" },
+  { match: /tomate/i, url: "https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=800" },
+  { match: /plátano|platano/i, url: "https://images.unsplash.com/photo-1574226516831-e1dff420e43e?w=800" },
+  { match: /fresa/i, url: "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=800" },
+  { match: /queso/i, url: "https://images.unsplash.com/photo-1502741338009-cac2772e18bc?w=800" },
+  { match: /jamón|jamon/i, url: "https://images.unsplash.com/photo-1528825871115-3581a5387919?w=800" },
+  { match: /huevo/i, url: "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=800" },
+  { match: /carne|ternera|cerdo|pollo/i, url: "https://images.unsplash.com/photo-1604908177225-9f5af45f4f54?w=800" },
+];
+
+const getFallbackImage = (product: Product) => {
+  const specific = productFallbacks.find(({ match }) => match.test(product.name));
+  if (specific) return specific.url;
+  return categoryFallbacks[product.category] || "https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=800";
+};
+
+const dedupeProducts = (items: Product[]) => {
+  const seen = new Set<string>();
+  return items.filter((item) => {
+    const key = item.name.trim().toLowerCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+};
+
 const categoryIcons: Record<string, any> = {
   "Frutas y Verduras": Apple,
   "Carnicería": Beef,
@@ -64,7 +104,7 @@ const Productos = () => {
       console.error('Error fetching products:', error);
       toast.error('Error al cargar los productos');
     } else {
-      setProducts(data || []);
+      setProducts(dedupeProducts(data || []));
     }
     setLoading(false);
   };
@@ -194,10 +234,14 @@ const Productos = () => {
                     {/* Image */}
                     <div className="relative aspect-square overflow-hidden">
                       <img
-                        src={product.image_url || '/placeholder.svg'}
+                        src={product.image_url || getFallbackImage(product)}
                         alt={product.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         loading="lazy"
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = getFallbackImage(product);
+                        }}
                       />
                       {product.is_fresh && (
                         <div className="absolute top-2 left-2 md:top-3 md:left-3 bg-leaf-500 text-primary-foreground px-2 py-0.5 md:px-2.5 md:py-1 rounded-full text-[10px] md:text-xs font-medium flex items-center gap-1">
