@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import WhatsAppButton from "@/components/WhatsAppButton";
+import CallButton from "@/components/CallButton";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -12,7 +12,7 @@ const Layout = ({ children }: LayoutProps) => {
       <Header />
       <main className="flex-1">{children}</main>
       <Footer />
-      <WhatsAppButton />
+      <CallButton />
     </div>
   );
 };
