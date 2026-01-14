@@ -27,6 +27,7 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Bloquear scroll del body
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = "hidden";
@@ -35,7 +36,6 @@ const Header = () => {
     }
   }, [isMenuOpen]);
 
-  // Lista de navegación para Desktop (incluye Inicio)
   const navLinks = [
     { href: "/", label: "Inicio", icon: Home },
     { href: "/sobre-nosotros", label: "Sobre Nosotros", icon: ShoppingBag },
@@ -45,7 +45,7 @@ const Header = () => {
     { href: "/contacto", label: "Contacto", icon: MessageSquare },
   ];
 
-  // Lista de navegación para Móvil (SIN Inicio)
+  // FILTRO: Quitar "Inicio" para el menú móvil
   const mobileLinks = navLinks.filter(link => link.label !== "Inicio");
 
   const isActive = (path: string) => location.pathname === path;
@@ -61,14 +61,16 @@ const Header = () => {
       >
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-18 md:h-22">
+            {/* Logo - Siempre encima con z-120 */}
             <Link to="/" className="z-[120]" onClick={() => setIsMenuOpen(false)}>
               <img 
                 src={logo} 
                 alt="Supermercado Esperanza" 
-                className="h-10 md:h-14 w-auto object-contain transition-transform"
+                className="h-10 md:h-14 w-auto object-contain transition-transform active:scale-95"
               />
             </Link>
 
+            {/* Desktop Nav */}
             <nav className="hidden lg:flex items-center gap-1">
               {navLinks.map((link) => (
                 <Link
@@ -86,13 +88,17 @@ const Header = () => {
             <div className="flex items-center gap-2 z-[120]">
               <CartButton />
               
+              {/* Hamburguesa con color forzado cuando está abierto */}
               <button
-                className="lg:hidden p-2.5 rounded-xl bg-leaf-50 text-leaf-600"
+                className={`lg:hidden p-2.5 rounded-xl transition-colors ${
+                  isMenuOpen ? "bg-gray-100 text-gray-900" : "bg-leaf-50 text-leaf-600"
+                }`}
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
               >
                 {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>
 
+              {/* Botones Desktop */}
               <div className="hidden md:flex items-center gap-2">
                 {user ? (
                   <DropdownMenu>
@@ -100,7 +106,7 @@ const Header = () => {
                       <Button variant="ghost" size="icon" className="rounded-full"><User className="w-5 h-5" /></Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-48">
-                      <DropdownMenuItem className="text-xs">{user.email}</DropdownMenuItem>
+                      <DropdownMenuItem className="text-xs truncate">{user.email}</DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem asChild><Link to="/mis-pedidos"><Package className="w-4 h-4 mr-2" />Mis Pedidos</Link></DropdownMenuItem>
                       <DropdownMenuItem onClick={signOut} className="text-destructive"><LogOut className="w-4 h-4 mr-2" />Cerrar sesión</DropdownMenuItem>
@@ -109,7 +115,7 @@ const Header = () => {
                 ) : (
                   <Button variant="ghost" size="sm" asChild className="font-semibold"><Link to="/auth">Iniciar sesión</Link></Button>
                 )}
-                <Button variant="hero" asChild className="rounded-xl">
+                <Button variant="hero" asChild className="rounded-xl shadow-sm">
                   <a href="tel:968641021" className="flex items-center gap-2"><Phone className="w-4 h-4" /> 968 64 10 21</a>
                 </Button>
               </div>
@@ -118,13 +124,16 @@ const Header = () => {
         </div>
       </header>
 
-      {/* --- MENÚ MÓVIL PANTALLA COMPLETA --- */}
+      {/* --- MENÚ MÓVIL (PANTALLA COMPLETA TOTAL) --- */}
       <div
-        className={`fixed inset-0 bg-white z-[105] lg:hidden flex flex-col transition-all duration-300 ${
-          isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        className={`fixed inset-0 bg-white z-[100] lg:hidden flex flex-col transition-all duration-300 ease-in-out ${
+          isMenuOpen 
+            ? "translate-y-0 opacity-100 visible" 
+            : "-translate-y-full opacity-0 invisible"
         }`}
       >
-        <div className="flex flex-col h-full pt-28 pb-10 px-6 overflow-y-auto">
+        {/* Contenido del menú - Padding superior para que no choque con el header */}
+        <div className="flex flex-col h-full pt-28 pb-8 px-6 overflow-y-auto bg-white">
           <nav className="flex flex-col gap-3">
             {mobileLinks.map((link) => {
               const Icon = link.icon;
@@ -132,39 +141,60 @@ const Header = () => {
                 <Link
                   key={link.href}
                   to={link.href}
-                  className={`flex items-center gap-4 p-5 rounded-2xl text-lg font-bold transition-all ${
-                    isActive(link.href) ? "bg-leaf-600 text-white shadow-lg" : "bg-gray-50 text-gray-800"
+                  className={`flex items-center gap-4 p-5 rounded-2xl text-lg font-bold transition-all active:scale-[0.98] ${
+                    isActive(link.href) 
+                      ? "bg-leaf-600 text-white shadow-lg shadow-leaf-100" 
+                      : "bg-gray-50 text-gray-800"
                   }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <Icon className="w-6 h-6" />
+                  <Icon className={`w-6 h-6 ${isActive(link.href) ? "text-white" : "text-leaf-600"}`} />
                   {link.label}
                 </Link>
               );
             })}
           </nav>
 
-          <div className="mt-auto pt-10 flex flex-col gap-4">
+          <div className="mt-auto pt-8 flex flex-col gap-4">
             {user ? (
               <div className="flex flex-col gap-3">
-                <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Cuenta activa</p>
-                  <p className="text-sm font-bold text-gray-800 truncate">{user.email}</p>
+                <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 flex items-center gap-3">
+                  <div className="p-2 bg-leaf-100 rounded-full">
+                    <User className="w-5 h-5 text-leaf-600" />
+                  </div>
+                  <div className="overflow-hidden">
+                    <p className="text-[10px] text-gray-400 font-bold uppercase">Mi Perfil</p>
+                    <p className="text-sm font-bold text-gray-800 truncate">{user.email}</p>
+                  </div>
                 </div>
-                <Button variant="outline" className="h-14 rounded-2xl justify-start font-bold" asChild onClick={() => setIsMenuOpen(false)}>
-                  <Link to="/mis-pedidos"><Package className="mr-3" /> Mis Pedidos</Link>
+                <Button variant="outline" className="h-14 rounded-2xl justify-start font-bold border-gray-200" asChild onClick={() => setIsMenuOpen(false)}>
+                  <Link to="/mis-pedidos"><Package className="mr-3 w-5 h-5" /> Mis Pedidos</Link>
                 </Button>
-                <Button variant="ghost" className="h-14 rounded-2xl justify-start font-bold text-red-500" onClick={() => { signOut(); setIsMenuOpen(false); }}>
-                  <LogOut className="mr-3" /> Cerrar sesión
+                <Button 
+                  variant="ghost" 
+                  className="h-14 rounded-2xl justify-start font-bold text-red-500 hover:bg-red-50" 
+                  onClick={() => { signOut(); setIsMenuOpen(false); }}
+                >
+                  <LogOut className="mr-3 w-5 h-5" /> Cerrar sesión
                 </Button>
               </div>
             ) : (
-              <Button variant="outline" className="h-14 rounded-2xl font-bold border-leaf-200 text-leaf-700" asChild onClick={() => setIsMenuOpen(false)}>
-                <Link to="/auth"><User className="mr-2" /> Iniciar sesión</Link>
+              <Button 
+                variant="outline" 
+                className="h-14 rounded-2xl font-bold border-2 border-leaf-200 text-leaf-700 active:bg-leaf-50" 
+                asChild 
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <Link to="/auth"><User className="mr-2 w-5 h-5" /> Iniciar sesión</Link>
               </Button>
             )}
 
-            <Button variant="hero" className="h-16 rounded-2xl text-xl font-bold shadow-xl" asChild onClick={() => setIsMenuOpen(false)}>
+            <Button 
+              variant="hero" 
+              className="h-16 rounded-2xl text-xl font-bold shadow-xl shadow-leaf-200 active:scale-95 transition-transform" 
+              asChild 
+              onClick={() => setIsMenuOpen(false)}
+            >
               <a href="tel:968641021" className="flex items-center justify-center gap-3">
                 <Phone className="w-6 h-6" /> 968 64 10 21
               </a>
