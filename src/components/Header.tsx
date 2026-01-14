@@ -139,34 +139,28 @@ const Header = () => {
           {/* Backdrop */}
           {isMenuOpen && (
             <div
-              className="fixed inset-0 bg-black/60 z-40 lg:hidden backdrop-blur-sm"
+              className="fixed inset-0 z-40 lg:hidden"
               onClick={() => setIsMenuOpen(false)}
-              style={{
-                animation: "fadeIn 0.3s ease-out"
-              }}
             />
           )}
 
           {/* Sidebar */}
           <div
-            className={`fixed left-0 top-18 bottom-0 w-72 bg-card/98 border-r border-border shadow-2xl z-40 overflow-y-auto transition-transform duration-300 ease-out lg:hidden ${
+            className={`fixed left-0 top-18 bottom-0 w-80 bg-white border-r border-gray-100 shadow-lg z-40 overflow-y-auto transition-transform duration-300 ease-out lg:hidden ${
               isMenuOpen ? "translate-x-0" : "-translate-x-full"
             }`}
-            style={{
-              animation: isMenuOpen ? "slideInLeft 0.3s ease-out" : undefined
-            }}
           >
-            <nav className="p-4 space-y-2">
+            <nav className="p-6 space-y-3">
               {navLinks.map((link) => {
                 const Icon = link.icon;
                 return (
                   <Link
                     key={link.href}
                     to={link.href}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all duration-300 ${
+                    className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all duration-300 ${
                       isActive(link.href)
-                        ? "text-white bg-leaf-500 shadow-md"
-                        : "text-foreground hover:bg-leaf-50"
+                        ? "text-leaf-500 bg-leaf-50"
+                        : "text-gray-700 hover:text-leaf-500 hover:bg-gray-50"
                     }`}
                     onClick={() => setIsMenuOpen(false)}
                   >
@@ -178,16 +172,16 @@ const Header = () => {
             </nav>
 
             {/* Sidebar Footer */}
-            <div className="border-t border-border/30 p-4 bg-gradient-to-t from-card/50 space-y-3">
+            <div className="border-t border-gray-100 p-6 space-y-3">
               {user ? (
                 <>
-                  <div className="px-4 py-3 bg-leaf-50 rounded-xl border border-leaf-200">
-                    <p className="text-xs text-muted-foreground font-medium">Cuenta</p>
-                    <p className="text-sm font-semibold text-foreground truncate mt-1">{user.email}</p>
+                  <div className="px-4 py-3 bg-gray-50 rounded-lg">
+                    <p className="text-xs text-gray-500 font-medium">Cuenta</p>
+                    <p className="text-sm font-semibold text-gray-800 truncate mt-1">{user.email}</p>
                   </div>
                   <Button
                     variant="outline"
-                    className="w-full justify-start hover:bg-leaf-50"
+                    className="w-full justify-start"
                     asChild
                     onClick={() => setIsMenuOpen(false)}
                   >
@@ -198,7 +192,7 @@ const Header = () => {
                   </Button>
                   <Button
                     variant="ghost"
-                    className="w-full justify-start text-destructive hover:text-destructive hover:bg-red-50"
+                    className="w-full justify-start text-red-600"
                     onClick={() => {
                       signOut();
                       setIsMenuOpen(false);
@@ -211,7 +205,7 @@ const Header = () => {
               ) : (
                 <Button
                   variant="outline"
-                  className="w-full justify-start hover:bg-leaf-50"
+                  className="w-full justify-start"
                   asChild
                   onClick={() => setIsMenuOpen(false)}
                 >
@@ -224,13 +218,13 @@ const Header = () => {
 
               <Button
                 variant="hero"
-                className="w-full justify-center gap-2 shadow-lg font-semibold"
+                className="w-full justify-center gap-2 font-semibold h-12"
                 asChild
                 onClick={() => setIsMenuOpen(false)}
               >
                 <a href="tel:968641021">
-                  <Phone className="w-4 h-4" />
-                  Llamar Ahora
+                  <Phone className="w-5 h-5" />
+                  968 64 10 21
                 </a>
               </Button>
             </div>
