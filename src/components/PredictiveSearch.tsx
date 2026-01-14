@@ -120,38 +120,49 @@ export const PredictiveSearch = ({ className, onProductSelect }: PredictiveSearc
       </div>
 
       {isOpen && results.length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-card border border-border rounded-xl shadow-organic-lg overflow-hidden z-50 animate-fade-in">
-          <div className="max-h-[400px] overflow-y-auto">
-            {results.map((product) => (
-              <div
-                key={product.id}
-                onClick={() => handleProductClick(product)}
-                className="flex items-center gap-3 p-3 hover:bg-muted/50 cursor-pointer transition-colors border-b border-border last:border-0"
-              >
-                <img
-                  src={product.image_url || "/placeholder.svg"}
-                  alt={product.name}
-                  className="w-14 h-14 object-cover rounded-lg"
-                />
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-foreground truncate">{product.name}</p>
-                  <p className="text-sm text-muted-foreground">{product.category}</p>
-                  <p className="text-sm font-semibold text-primary">
-                    {product.price.toFixed(2)}€/{product.unit || "ud"}
-                  </p>
-                </div>
-                <Button
-                  size="icon"
-                  variant="hero"
-                  className="rounded-full w-9 h-9 flex-shrink-0"
-                  onClick={(e) => handleAddToCart(product, e)}
-                >
-                  <Plus className="w-4 h-4" />
-                </Button>
+        <>
+          {/* Backdrop suave */}
+          <div 
+            className="fixed inset-0 bg-black/30 z-40"
+            onClick={() => setIsOpen(false)}
+          />
+          
+          {/* Dropdown con fondo blanco */}
+          <div className="absolute top-full left-0 right-0 mt-3 bg-white border border-gray-200 rounded-2xl shadow-xl overflow-hidden z-50 animate-fade-in">
+            <div className="max-h-[500px] overflow-y-auto">
+              <div className="p-3 space-y-2">
+                {results.map((product) => (
+                  <div
+                    key={product.id}
+                    onClick={() => handleProductClick(product)}
+                    className="flex items-center gap-3 p-3 hover:bg-gray-50 cursor-pointer transition-colors rounded-lg border border-gray-100 hover:border-gray-200"
+                  >
+                    <img
+                      src={product.image_url || "/placeholder.svg"}
+                      alt={product.name}
+                      className="w-16 h-16 object-cover rounded-lg flex-shrink-0"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-gray-800 truncate text-sm md:text-base">{product.name}</p>
+                      <p className="text-xs text-gray-500">{product.category}</p>
+                      <p className="text-sm font-bold text-leaf-500 mt-1">
+                        {product.price.toFixed(2)}€/{product.unit || "ud"}
+                      </p>
+                    </div>
+                    <Button
+                      size="icon"
+                      variant="hero"
+                      className="rounded-full w-10 h-10 flex-shrink-0"
+                      onClick={(e) => handleAddToCart(product, e)}
+                    >
+                      <Plus className="w-5 h-5" />
+                    </Button>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
-        </div>
+        </>
       )}
 
       {isOpen && query.length >= 2 && results.length === 0 && !loading && (
