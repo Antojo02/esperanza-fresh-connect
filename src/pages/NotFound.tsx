@@ -1,179 +1,85 @@
-import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Phone, User, LogOut, Package, ShoppingBag, Star, MapPin, MessageSquare } from "lucide-react";
+import { useLocation, Link } from "react-router-dom";
+import { useEffect } from "react";
+import { Home, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CartButton } from "@/components/CartButton";
-import { useAuth } from "@/contexts/AuthContext";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import logo from "@/assets/logo.avif";
+import Layout from "@/components/Layout";
 
-const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+const NotFound = () => {
   const location = useLocation();
-  const { user, signOut } = useAuth();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    if (isMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-  }, [isMenuOpen]);
-
-  // Lista de navegación para Desktop (incluye Inicio)
-  const navLinks = [
-    { href: "/", label: "Inicio", icon: Home },
-    { href: "/sobre-nosotros", label: "Sobre Nosotros", icon: ShoppingBag },
-    { href: "/productos", label: "Productos", icon: Package },
-    { href: "/resenas", label: "Reseñas", icon: Star },
-    { href: "/como-llegar", label: "Cómo Llegar", icon: MapPin },
-    { href: "/contacto", label: "Contacto", icon: MessageSquare },
-  ];
-
-  // Lista de navegación para Móvil (SIN Inicio)
-  const mobileLinks = navLinks.filter(link => link.label !== "Inicio");
-
-  const isActive = (path: string) => location.pathname === path;
+    console.error("404 Error: User attempted to access non-existent route:", location.pathname);
+  }, [location.pathname]);
 
   return (
-    <>
-      <header 
-        className={`fixed top-0 left-0 right-0 z-[110] transition-all duration-300 ${
-          isScrolled || isMenuOpen
-            ? "bg-white shadow-md border-b border-gray-100" 
-            : "bg-transparent"
-        }`}
-      >
+    <Layout>
+      <section className="min-h-screen flex items-center justify-center bg-gradient-to-b from-leaf-50 to-background py-20">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-18 md:h-22">
-            <Link to="/" className="z-[120]" onClick={() => setIsMenuOpen(false)}>
-              <img 
-                src={logo} 
-                alt="Supermercado Esperanza" 
-                className="h-10 md:h-14 w-auto object-contain transition-transform"
-              />
-            </Link>
-
-            <nav className="hidden lg:flex items-center gap-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  className={`px-4 py-2.5 rounded-xl font-medium text-sm transition-all ${
-                    isActive(link.href) ? "text-leaf-600 bg-leaf-50" : "text-foreground/80 hover:text-leaf-600"
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-
-            <div className="flex items-center gap-2 z-[120]">
-              <CartButton />
-              
-              <button
-                className="lg:hidden p-2.5 rounded-xl bg-leaf-50 text-leaf-600"
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-              >
-                {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </button>
-
-              <div className="hidden md:flex items-center gap-2">
-                {user ? (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="rounded-full"><User className="w-5 h-5" /></Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-48">
-                      <DropdownMenuItem className="text-xs">{user.email}</DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem asChild><Link to="/mis-pedidos"><Package className="w-4 h-4 mr-2" />Mis Pedidos</Link></DropdownMenuItem>
-                      <DropdownMenuItem onClick={signOut} className="text-destructive"><LogOut className="w-4 h-4 mr-2" />Cerrar sesión</DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                ) : (
-                  <Button variant="ghost" size="sm" asChild className="font-semibold"><Link to="/auth">Iniciar sesión</Link></Button>
-                )}
-                <Button variant="hero" asChild className="rounded-xl">
-                  <a href="tel:968641021" className="flex items-center gap-2"><Phone className="w-4 h-4" /> 968 64 10 21</a>
-                </Button>
+          <div className="max-w-2xl mx-auto text-center space-y-8">
+            {/* Large 404 */}
+            <div className="relative">
+              <div className="text-9xl md:text-[150px] font-bold text-leaf-100 leading-none">
+                404
               </div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <ShoppingCart className="w-32 h-32 md:w-48 md:h-48 text-leaf-500 opacity-30" />
+              </div>
+            </div>
+
+            {/* Heading */}
+            <div className="space-y-4">
+              <h1 className="text-4xl md:text-5xl font-bold text-foreground">
+                ¡Oops! Página no encontrada
+              </h1>
+              <p className="text-lg md:text-xl text-muted-foreground max-w-lg mx-auto">
+                Parece que buscabas algo que no existe en <span className="font-semibold text-leaf-500">Supermercado Esperanza</span>. 
+                No te preocupes, vuelve al inicio y continúa comprando.
+              </p>
+            </div>
+
+            {/* Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
+              <Button
+                variant="hero"
+                size="lg"
+                asChild
+                className="gap-2"
+              >
+                <Link to="/">
+                  <Home className="w-5 h-5" />
+                  Volver al Inicio
+                </Link>
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                asChild
+                className="gap-2"
+              >
+                <Link to="/productos">
+                  <ShoppingCart className="w-5 h-5" />
+                  Ver Productos
+                </Link>
+              </Button>
+            </div>
+
+            {/* Decorative elements */}
+            <div className="pt-12 space-y-4">
+              <p className="text-sm text-muted-foreground">
+                ¿Necesitas ayuda? 
+                <a 
+                  href="tel:968641021"
+                  className="ml-2 text-leaf-500 font-semibold hover:underline"
+                >
+                  Llámanos al 968 64 10 21
+                </a>
+              </p>
             </div>
           </div>
         </div>
-      </header>
-
-      {/* --- MENÚ MÓVIL PANTALLA COMPLETA --- */}
-      <div
-        className={`fixed inset-0 bg-white z-[105] lg:hidden flex flex-col transition-all duration-300 ${
-          isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        }`}
-      >
-        <div className="flex flex-col h-full pt-28 pb-10 px-6 overflow-y-auto">
-          <nav className="flex flex-col gap-3">
-            {mobileLinks.map((link) => {
-              const Icon = link.icon;
-              return (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  className={`flex items-center gap-4 p-5 rounded-2xl text-lg font-bold transition-all ${
-                    isActive(link.href) ? "bg-leaf-600 text-white shadow-lg" : "bg-gray-50 text-gray-800"
-                  }`}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <Icon className="w-6 h-6" />
-                  {link.label}
-                </Link>
-              );
-            })}
-          </nav>
-
-          <div className="mt-auto pt-10 flex flex-col gap-4">
-            {user ? (
-              <div className="flex flex-col gap-3">
-                <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Cuenta activa</p>
-                  <p className="text-sm font-bold text-gray-800 truncate">{user.email}</p>
-                </div>
-                <Button variant="outline" className="h-14 rounded-2xl justify-start font-bold" asChild onClick={() => setIsMenuOpen(false)}>
-                  <Link to="/mis-pedidos"><Package className="mr-3" /> Mis Pedidos</Link>
-                </Button>
-                <Button variant="ghost" className="h-14 rounded-2xl justify-start font-bold text-red-500" onClick={() => { signOut(); setIsMenuOpen(false); }}>
-                  <LogOut className="mr-3" /> Cerrar sesión
-                </Button>
-              </div>
-            ) : (
-              <Button variant="outline" className="h-14 rounded-2xl font-bold border-leaf-200 text-leaf-700" asChild onClick={() => setIsMenuOpen(false)}>
-                <Link to="/auth"><User className="mr-2" /> Iniciar sesión</Link>
-              </Button>
-            )}
-
-            <Button variant="hero" className="h-16 rounded-2xl text-xl font-bold shadow-xl" asChild onClick={() => setIsMenuOpen(false)}>
-              <a href="tel:968641021" className="flex items-center justify-center gap-3">
-                <Phone className="w-6 h-6" /> 968 64 10 21
-              </a>
-            </Button>
-          </div>
-        </div>
-      </div>
-    </>
+      </section>
+    </Layout>
   );
 };
 
-export default Header;
+export default NotFound;
