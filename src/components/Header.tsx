@@ -27,7 +27,7 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Bloquear el scroll del cuerpo cuando el menú está abierto
+  // Bloquea el scroll del sitio cuando el menú móvil está abierto
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = "hidden";
@@ -48,190 +48,182 @@ const Header = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header 
-      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${
-        isScrolled || isMenuOpen
-          ? "bg-white/95 backdrop-blur-lg shadow-md border-b border-border" 
-          : "bg-transparent"
-      }`}
-    >
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-18 md:h-22">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group" onClick={() => setIsMenuOpen(false)}>
-            <img 
-              src={logo} 
-              alt="Supermercado Esperanza" 
-              className="h-12 md:h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-            />
-          </Link>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                to={link.href}
-                className={`px-4 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 ${
-                  isActive(link.href)
-                    ? "text-leaf-600 bg-leaf-50"
-                    : "text-foreground/80 hover:text-leaf-600 hover:bg-leaf-50"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-
-          {/* Right Actions (Desktop) */}
-          <div className="hidden md:flex items-center gap-2">
-            <CartButton />
-            
-            {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="relative rounded-full">
-                    <User className="w-5 h-5" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem className="text-muted-foreground text-xs truncate">
-                    {user.email}
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link to="/mis-pedidos" className="flex items-center cursor-pointer">
-                      <Package className="w-4 h-4 mr-2" />
-                      Mis Pedidos
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={signOut} className="text-destructive cursor-pointer">
-                    <LogOut className="w-4 h-4 mr-2" />
-                    Cerrar sesión
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <Button variant="ghost" size="sm" asChild className="font-semibold">
-                <Link to="/auth">Iniciar sesión</Link>
-              </Button>
-            )}
-
-            <Button variant="hero" size="default" asChild className="rounded-xl shadow-sm">
-              <a href="tel:968641021" className="flex items-center gap-2">
-                <Phone className="w-4 h-4" />
-                968 64 10 21
-              </a>
-            </Button>
-          </div>
-
-          {/* Mobile Actions (Botones que se ven siempre en el móvil) */}
-          <div className="flex lg:hidden items-center gap-2">
-            <CartButton />
-            <button
-              className="p-2 hover:bg-leaf-50 rounded-lg transition-all active:scale-90"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label="Toggle menu"
-            >
-              {isMenuOpen ? (
-                <X className="w-7 h-7 text-foreground" />
-              ) : (
-                <Menu className="w-7 h-7 text-foreground" />
-              )}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Sidebar Navigation */}
-      <div
-        className={`fixed inset-0 z-[90] lg:hidden transition-all duration-300 ${
-          isMenuOpen ? "visible" : "invisible"
+    <>
+      <header 
+        className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${
+          isScrolled || isMenuOpen
+            ? "bg-white shadow-md border-b border-gray-100" 
+            : "bg-transparent"
         }`}
       >
-        {/* Backdrop Oscuro */}
-        <div
-          className={`absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300 ${
-            isMenuOpen ? "opacity-100" : "opacity-0"
-          }`}
-          onClick={() => setIsMenuOpen(false)}
-        />
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-18 md:h-22">
+            {/* Logo */}
+            <Link to="/" className="z-[110]" onClick={() => setIsMenuOpen(false)}>
+              <img 
+                src={logo} 
+                alt="Supermercado Esperanza" 
+                className="h-10 md:h-14 w-auto object-contain transition-transform duration-300 hover:scale-105"
+              />
+            </Link>
 
-        {/* Panel Lateral (Sidebar) */}
-        <div
-          className={`absolute left-0 top-0 bottom-0 w-[280px] bg-white shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${
-            isMenuOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
-        >
-          {/* Logo superior en el menú móvil */}
-          <div className="p-6 border-b border-gray-50 flex items-center justify-between">
-            <span className="font-bold text-leaf-600">MENÚ</span>
-            <X className="w-5 h-5 text-gray-400 cursor-pointer" onClick={() => setIsMenuOpen(false)} />
+            {/* Desktop Navigation */}
+            <nav className="hidden lg:flex items-center gap-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  className={`px-4 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 ${
+                    isActive(link.href)
+                      ? "text-leaf-600 bg-leaf-50"
+                      : "text-foreground/80 hover:text-leaf-600 hover:bg-leaf-50"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+
+            {/* Right Actions */}
+            <div className="flex items-center gap-2 z-[110]">
+              <CartButton />
+              
+              {/* Desktop Auth */}
+              <div className="hidden md:flex items-center gap-2">
+                {user ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon" className="relative rounded-full">
+                        <User className="w-5 h-5" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48">
+                      <DropdownMenuItem className="text-muted-foreground text-xs truncate">
+                        {user.email}
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild>
+                        <Link to="/mis-pedidos" className="flex items-center cursor-pointer">
+                          <Package className="w-4 h-4 mr-2" />
+                          Mis Pedidos
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={signOut} className="text-destructive cursor-pointer">
+                        <LogOut className="w-4 h-4 mr-2" />
+                        Cerrar sesión
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <Button variant="ghost" size="sm" asChild className="font-semibold">
+                    <Link to="/auth">Iniciar sesión</Link>
+                  </Button>
+                )}
+
+                <Button variant="hero" size="default" asChild className="rounded-xl shadow-sm">
+                  <a href="tel:968641021" className="flex items-center gap-2">
+                    <Phone className="w-4 h-4" />
+                    968 64 10 21
+                  </a>
+                </Button>
+              </div>
+
+              {/* Mobile Menu Toggle */}
+              <button
+                className="lg:hidden p-2.5 rounded-xl bg-leaf-50 text-leaf-600 transition-all active:scale-90"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                aria-label="Toggle menu"
+              >
+                {isMenuOpen ? (
+                  <X className="w-6 h-6" />
+                ) : (
+                  <Menu className="w-6 h-6" />
+                )}
+              </button>
+            </div>
           </div>
+        </div>
+      </header>
 
-          {/* Enlaces principales */}
-          <nav className="flex-1 overflow-y-auto p-4 space-y-1">
+      {/* --- MOBILE FULL SCREEN MENU --- */}
+      <div
+        className={`fixed inset-0 bg-white z-[95] lg:hidden transition-all duration-500 ease-in-out ${
+          isMenuOpen 
+            ? "opacity-100 pointer-events-auto translate-y-0" 
+            : "opacity-0 pointer-events-none -translate-y-4"
+        }`}
+      >
+        <div className="flex flex-col h-full pt-24 pb-10 px-6 overflow-y-auto">
+          {/* Mobile Nav Links */}
+          <nav className="flex flex-col gap-2">
             {navLinks.map((link) => {
               const Icon = link.icon;
               return (
                 <Link
                   key={link.href}
                   to={link.href}
-                  className={`flex items-center gap-4 px-4 py-3.5 rounded-xl font-semibold transition-colors ${
+                  className={`flex items-center gap-4 p-4 rounded-2xl text-lg font-bold transition-all ${
                     isActive(link.href)
-                      ? "text-leaf-600 bg-leaf-50"
-                      : "text-gray-700 hover:bg-gray-50"
+                      ? "bg-leaf-600 text-white shadow-lg shadow-leaf-100"
+                      : "bg-gray-50 text-gray-700 active:bg-gray-100"
                   }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <Icon className={`w-5 h-5 ${isActive(link.href) ? "text-leaf-600" : "text-gray-400"}`} />
-                  <span>{link.label}</span>
+                  <div className={`p-2 rounded-lg ${isActive(link.href) ? "bg-white/20" : "bg-white"}`}>
+                    <Icon className="w-6 h-6" />
+                  </div>
+                  {link.label}
                 </Link>
               );
             })}
           </nav>
 
-          {/* Pie del Menú (Login, Pedidos y Teléfono) */}
-          <div className="p-5 border-t border-gray-100 bg-gray-50/50 space-y-3">
+          {/* Bottom Actions Area */}
+          <div className="mt-auto pt-8 flex flex-col gap-4">
             {user ? (
-              <div className="space-y-3">
-                <div className="px-4 py-3 bg-white border border-gray-200 rounded-xl shadow-sm">
-                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Mi Cuenta</p>
-                  <p className="text-sm font-bold text-gray-800 truncate">{user.email}</p>
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                  <div className="w-10 h-10 rounded-full bg-leaf-100 flex items-center justify-center">
+                    <User className="text-leaf-600 w-5 h-5" />
+                  </div>
+                  <div className="flex-1 overflow-hidden">
+                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Sesión iniciada</p>
+                    <p className="text-sm font-bold text-gray-800 truncate">{user.email}</p>
+                  </div>
                 </div>
                 <Button
                   variant="outline"
-                  className="w-full justify-start h-12 rounded-xl bg-white"
+                  className="w-full h-14 rounded-2xl justify-start text-base font-semibold"
                   asChild
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <Link to="/mis-pedidos">
-                    <Package className="w-4 h-4 mr-3 text-gray-500" />
+                    <Package className="w-5 h-5 mr-3" />
                     Mis Pedidos
                   </Link>
                 </Button>
                 <Button
                   variant="ghost"
-                  className="w-full justify-start h-12 rounded-xl text-red-500 hover:bg-red-50"
+                  className="w-full h-14 rounded-2xl justify-start text-base font-semibold text-red-500 hover:bg-red-50"
                   onClick={() => {
                     signOut();
                     setIsMenuOpen(false);
                   }}
                 >
-                  <LogOut className="w-4 h-4 mr-3" />
+                  <LogOut className="w-5 h-5 mr-3" />
                   Cerrar sesión
                 </Button>
               </div>
             ) : (
               <Button
                 variant="outline"
-                className="w-full justify-center h-12 rounded-xl border-leaf-200 text-leaf-700 font-bold bg-white"
+                className="w-full h-14 rounded-2xl text-base font-bold border-leaf-200 text-leaf-700 bg-white"
                 asChild
                 onClick={() => setIsMenuOpen(false)}
               >
                 <Link to="/auth">
-                  <User className="w-4 h-4 mr-2" />
+                  <User className="w-5 h-5 mr-2" />
                   Iniciar sesión
                 </Link>
               </Button>
@@ -239,19 +231,19 @@ const Header = () => {
 
             <Button
               variant="hero"
-              className="w-full justify-center h-12 rounded-xl font-bold shadow-lg shadow-leaf-100"
+              className="w-full h-14 rounded-2xl text-lg font-bold shadow-xl shadow-leaf-100 flex items-center justify-center gap-3"
               asChild
               onClick={() => setIsMenuOpen(false)}
             >
-              <a href="tel:968641021" className="flex items-center gap-2">
-                <Phone className="w-5 h-5" />
+              <a href="tel:968641021">
+                <Phone className="w-6 h-6" />
                 968 64 10 21
               </a>
             </Button>
           </div>
         </div>
       </div>
-    </header>
+    </>
   );
 };
 
