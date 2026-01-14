@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Phone, User, LogOut, Package } from "lucide-react";
+import { Menu, X, Phone, User, LogOut, Package, Home, ShoppingBag, Star, MapPin, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CartButton } from "@/components/CartButton";
 import { useAuth } from "@/contexts/AuthContext";
@@ -28,11 +28,12 @@ const Header = () => {
   }, []);
 
   const navLinks = [
-    { href: "/sobre-nosotros", label: "Sobre Nosotros" },
-    { href: "/productos", label: "Productos" },
-    { href: "/resenas", label: "Reseñas" },
-    { href: "/como-llegar", label: "Cómo Llegar" },
-    { href: "/contacto", label: "Contacto" },
+    { href: "/", label: "Inicio", icon: Home },
+    { href: "/sobre-nosotros", label: "Sobre Nosotros", icon: ShoppingBag },
+    { href: "/productos", label: "Productos", icon: Package },
+    { href: "/resenas", label: "Reseñas", icon: Star },
+    { href: "/como-llegar", label: "Cómo Llegar", icon: MapPin },
+    { href: "/contacto", label: "Contacto", icon: MessageSquare },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -40,8 +41,8 @@ const Header = () => {
   return (
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled 
-          ? "bg-card/98 backdrop-blur-md shadow-organic border-b border-border" 
+        isScrolled || isMenuOpen
+          ? "bg-card/95 backdrop-blur-lg shadow-organic border-b border-border" 
           : "bg-transparent"
       }`}
     >
@@ -133,65 +134,126 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Mobile Navigation */}
-        <div 
-          className={`lg:hidden overflow-hidden transition-all duration-300 ${
-            isMenuOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
-          }`}
-        >
-          <nav className="py-4 border-t border-border">
-            <div className="flex flex-col gap-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  className={`px-4 py-4 rounded-xl font-medium text-base transition-all duration-300 active:scale-98 ${
-                    isActive(link.href)
-                      ? "text-leaf-500 bg-leaf-50"
-                      : "text-foreground/80 hover:text-leaf-500 hover:bg-leaf-50"
-                  }`}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
-              
-              <div className="pt-4 px-2 space-y-2">
-                {user ? (
-                  <>
-                    <Button variant="outline" className="w-full mb-2" asChild>
-                      <Link to="/mis-pedidos" onClick={() => setIsMenuOpen(false)}>
-                        <Package className="w-4 h-4 mr-2" />
-                        Mis Pedidos
-                      </Link>
-                    </Button>
-                    <div className="flex items-center justify-between bg-muted/50 rounded-xl px-4 py-3">
-                      <span className="text-sm text-muted-foreground truncate">{user.email}</span>
-                      <Button variant="ghost" size="sm" onClick={signOut}>
-                        <LogOut className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </>
-                ) : (
-                  <Button variant="outline" className="w-full" asChild>
-                    <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
-                      <User className="w-4 h-4 mr-2" />
-                      Iniciar sesión
+        {/* Mobile Sidebar */}
+        <>
+          {/* Backdrop */}
+          {isMenuOpen && (
+            <div
+              className="fixed inset-0 bg-black/60 z-40 lg:hidden backdrop-blur-sm"
+              onClick={() => setIsMenuOpen(false)}
+              style={{
+                animation: "fadeIn 0.3s ease-out"
+              }}
+            />
+          )}
+
+          {/* Sidebar */}
+          <div
+            className={`fixed left-0 top-18 bottom-0 w-72 bg-card/98 border-r border-border shadow-2xl z-40 overflow-y-auto transition-transform duration-300 ease-out lg:hidden ${
+              isMenuOpen ? "translate-x-0" : "-translate-x-full"
+            }`}
+            style={{
+              animation: isMenuOpen ? "slideInLeft 0.3s ease-out" : undefined
+            }}
+          >
+            <nav className="p-4 space-y-2">
+              {navLinks.map((link) => {
+                const Icon = link.icon;
+                return (
+                  <Link
+                    key={link.href}
+                    to={link.href}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all duration-300 ${
+                      isActive(link.href)
+                        ? "text-white bg-leaf-500 shadow-md"
+                        : "text-foreground hover:bg-leaf-50"
+                    }`}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <Icon className="w-5 h-5" />
+                    <span>{link.label}</span>
+                  </Link>
+                );
+              })}
+            </nav>
+
+            {/* Sidebar Footer */}
+            <div className="border-t border-border/30 p-4 bg-gradient-to-t from-card/50 space-y-3">
+              {user ? (
+                <>
+                  <div className="px-4 py-3 bg-leaf-50 rounded-xl border border-leaf-200">
+                    <p className="text-xs text-muted-foreground font-medium">Cuenta</p>
+                    <p className="text-sm font-semibold text-foreground truncate mt-1">{user.email}</p>
+                  </div>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start hover:bg-leaf-50"
+                    asChild
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <Link to="/mis-pedidos">
+                      <Package className="w-4 h-4 mr-2" />
+                      Mis Pedidos
                     </Link>
                   </Button>
-                )}
-                
-                <Button variant="hero" size="lg" className="w-full" asChild>
-                  <a href="tel:968641021" className="flex items-center justify-center gap-2">
-                    <Phone className="w-5 h-5" />
-                    968 64 10 21
-                  </a>
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start text-destructive hover:text-destructive hover:bg-red-50"
+                    onClick={() => {
+                      signOut();
+                      setIsMenuOpen(false);
+                    }}
+                  >
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Cerrar sesión
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  variant="outline"
+                  className="w-full justify-start hover:bg-leaf-50"
+                  asChild
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <Link to="/auth">
+                    <User className="w-4 h-4 mr-2" />
+                    Iniciar sesión
+                  </Link>
                 </Button>
-              </div>
+              )}
+
+              <Button
+                variant="hero"
+                className="w-full justify-center gap-2 shadow-lg font-semibold"
+                asChild
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <a href="tel:968641021">
+                  <Phone className="w-4 h-4" />
+                  Llamar Ahora
+                </a>
+              </Button>
             </div>
-          </nav>
-        </div>
+          </div>
+        </>
       </div>
+
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes slideInLeft {
+          from {
+            transform: translateX(-100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+      `}</style>
     </header>
   );
 };
