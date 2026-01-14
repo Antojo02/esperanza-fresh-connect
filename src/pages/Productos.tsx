@@ -33,15 +33,53 @@ const categoryFallbacks: Record<string, string> = {
 };
 
 const productFallbacks: { match: RegExp; url: string }[] = [
-  { match: /coca|cola/i, url: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=800" },
+  // Bebidas específicas
+  { match: /coca-cola|coca cola/i, url: "https://images.unsplash.com/photo-1554866585-acbb2231f86c?w=800" },
+  { match: /cerveza/i, url: "https://images.unsplash.com/photo-1608270861620-7911c6b76f66?w=800" },
+  { match: /casera|gaseosa/i, url: "https://images.unsplash.com/photo-1599599810694-f3f7d2c5d4b1?w=800" },
+  { match: /zumo|jugo/i, url: "https://images.unsplash.com/photo-1600271886742-f049cd1f9d70?w=800" },
   { match: /agua/i, url: "https://images.unsplash.com/photo-1526402462921-9e9dd1b4e47b?w=800" },
+  { match: /vino|rioja/i, url: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800" },
+  
+  // Frutas específicas
+  { match: /manzana.*roja|roja.*manzana/i, url: "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=800" },
+  { match: /naranja|valencia/i, url: "https://images.unsplash.com/photo-1547514701-42782101795e?w=800" },
+  { match: /plátano|platano|canarias/i, url: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=800" },
+  { match: /fresa|fresas/i, url: "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=800" },
+  { match: /uva/i, url: "https://images.unsplash.com/photo-1537640538855-dbf07daf2e4e?w=800" },
+  
+  // Verduras específicas
+  { match: /tomate.*rama|rama.*tomate|tomates rama/i, url: "https://images.unsplash.com/photo-1590080876878-e1df82cad96f?w=800" },
   { match: /tomate/i, url: "https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=800" },
-  { match: /plátano|platano/i, url: "https://images.unsplash.com/photo-1574226516831-e1dff420e43e?w=800" },
-  { match: /fresa/i, url: "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=800" },
+  { match: /lechuga|ensalada/i, url: "https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?w=800" },
+  { match: /papa|patata/i, url: "https://images.unsplash.com/photo-1596386219268-b3a72fdf5d5b?w=800" },
+  
+  // Carnicería específica
+  { match: /pechuga.*pollo|pollo.*pechuga/i, url: "https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=800" },
+  { match: /chuleta.*cerdo|cerdo.*chuleta|cerdo ibérico/i, url: "https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=800" },
+  { match: /filete.*ternera|ternera|bistec/i, url: "https://images.unsplash.com/photo-1588347818036-558601350947?w=800" },
+  { match: /carne picada|picada/i, url: "https://images.unsplash.com/photo-1602473812169-a8e8e6e8b6e3?w=800" },
+  
+  // Embutidos y Carnes
+  { match: /jamón serrano|jamón/i, url: "https://images.unsplash.com/photo-1528825871115-3581a5387919?w=800" },
+  { match: /chorizo.*ibérico|ibérico/i, url: "https://images.unsplash.com/photo-1625943553852-781c6dd46faa?w=800" },
+  
+  // Lácteos específicos
+  { match: /queso manchego curado/i, url: "https://images.unsplash.com/photo-1452195100486-9cc805987862?w=400" },
+  { match: /queso manchego/i, url: "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=800" },
+  { match: /queso brie|brie/i, url: "https://images.unsplash.com/photo-1452195100486-9cc805987862?w=400" },
   { match: /queso/i, url: "https://images.unsplash.com/photo-1502741338009-cac2772e18bc?w=800" },
-  { match: /jamón|jamon/i, url: "https://images.unsplash.com/photo-1528825871115-3581a5387919?w=800" },
-  { match: /huevo/i, url: "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=800" },
-  { match: /carne|ternera|cerdo|pollo/i, url: "https://images.unsplash.com/photo-1604908177225-9f5af45f4f54?w=800" },
+  { match: /huevo|huevos|campero/i, url: "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=800" },
+  { match: /leche|yogur|lácteo/i, url: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800" },
+  
+  // Panadería
+  { match: /pan.*pueblo|pueblo/i, url: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800" },
+  { match: /croissant|medialuna/i, url: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=800" },
+  
+  // Despensa
+  { match: /aceite.*oliva|oliva.*virgen/i, url: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=800" },
+  { match: /arroz.*bomba|bomba/i, url: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=800" },
+  { match: /pasta|espagueti/i, url: "https://images.unsplash.com/photo-1551462147-ff29053bfc14?w=800" },
 ];
 
 const getFallbackImage = (product: Product) => {
